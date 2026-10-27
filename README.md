@@ -3,7 +3,7 @@
 위키데이터를 GEUL 문서로 바꾸는 도구 `wikigeul`. [wikipg](https://github.com/geul-org/wikipg)가 PostgreSQL에 적재한 덤프를 읽어, 항목·속성을 GEUL 문서로 만들어 `.well-known/geul/` 아래에 공표한다. 출처·근거 기록(geul-dev files/geul/sign.md, legacy.md)의 실전 시험대이기도 하다.
 
 - 저장소: [geul-org/gogeulwiki](https://github.com/geul-org/gogeulwiki). 2026-10-27 wikiport(지금 wikipg)에서 변환 코드(옛 `cmd/wikiport`)를 이력째 옮겨 왔다(`git filter-repo`, 옛 커밋에 섞여 있던 바이너리는 뺐다). 모듈 경로는 `github.com/geul-org/gogeulwiki`.
-- 의존: 라이브러리 [gogeul](https://github.com/geul-org/gogeul)(`replace ../gogeul`), 적재 스키마 [wikipg](https://github.com/geul-org/wikipg)(`replace ../wikipg`, 테스트만 `sql.Schema`를 씀). 세 저장소를 geul-dev `draft/` 아래에 나란히 둔다. 명세: [geul-org/geul-dev](https://github.com/geul-org/geul-dev) `files/geul/docs/`.
+- 의존: 라이브러리 [gogeul](https://github.com/geul-org/gogeul), 적재 스키마 [wikipg](https://github.com/geul-org/wikipg)(테스트만 `sql.Schema`를 씀). `go.mod`는 공개 커밋의 pseudo-version을 require하고 `replace`는 두지 않는다. 로컬 개발은 geul-dev `draft/` 아래에 세 저장소를 나란히 두고 `draft/go.work` 워크스페이스로 묶는다(각 저장소 `.gitignore`가 `go.work`를 제외). 의존 올리기: gogeul(또는 wikipg)을 푸시한 뒤 `GOWORK=off go get github.com/geul-org/gogeul@<커밋> && GOWORK=off go mod tidy`. 명세: [geul-org/geul-dev](https://github.com/geul-org/geul-dev) `files/geul/docs/`.
 
 ```
 cmd/wikigeul/      DB → GEUL 문서 공표(범위 반복, 속성 문서, 이름 색인, 보고서)
@@ -100,7 +100,7 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
   - 적재 도구는 적지 않는다(2026-10-27 결정). wikipg는 덤프를 무손실로 저장하므로(덤프 줄 원문 `entity_raw`, 구조화 표가 못 담는 값은 `*_json` 열) 문서는 덤프·wikigeul·라이브러리로 정해진다. 적재 도구 커밋은 DB `dump.loader_commit`에 남는다. wikipg(옛 이름 wikiload 포함)가 아닌 적재 도구로 채운 dump는 무손실을 알 수 없어 거부한다
   - (이전 0908 판의 적재 도구 geul-entity `0x0001000000000003` `4225b3b4297796a79e95c4cda5aa54df3acc4069`)
   - 변환 도구 wikigeul(gogeulwiki 저장소, `0x0001000000000001`) `-commit`
-  - GEUL 라이브러리 gogeul(`0x0001000000000002`) `-lib-commit`. gogeulwiki는 `go.mod`의 `replace`로 로컬 라이브러리를 쓰므로 gogeulwiki 커밋만으로는 라이브러리 코드가 정해지지 않는다
+  - GEUL 라이브러리 gogeul(`0x0001000000000002`) `-lib-commit`. 로컬 빌드는 `draft/go.work`로 작업 중인 gogeul을 쓰므로 `go.mod`가 고정한 버전과 다를 수 있다. 그래서 gogeulwiki 커밋만으로는 라이브러리 코드가 정해지지 않는다
 
 ## 변환 도구 (`cmd/wikigeul`)
 

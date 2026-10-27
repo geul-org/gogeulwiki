@@ -1,5 +1,9 @@
 github.com/cacack/gedcom-go/v3 v3.2.0 h1:maqzijLQW/MxujHqfqdEziNQgJZpd6tcxkujPLFD+dY=
 github.com/cacack/gedcom-go/v3 v3.2.0/go.mod h1:5ekehkreOOKz+SZ/gjcZ3vApMihE6ycHuYMkYNkVYE8=
+github.com/geul-org/gogeul v0.0.0-20261027045730-631d114e99b1 h1:H/+w6VKvOTlJ/wTxCRGCCx3xxl8U2HzfNsekFzXtJRg=
+github.com/geul-org/gogeul v0.0.0-20261027045730-631d114e99b1/go.mod h1:wU7yDNFgEgD66O+OR7RxBS3txIKx+NF2DDMw8evkKKA=
+github.com/geul-org/wikipg v0.0.0-20261027045733-70fc346240de h1:yGMC7ubKO516sOaMiNe2h72tCpvM91gnHai/CVmd+w4=
+github.com/geul-org/wikipg v0.0.0-20261027045733-70fc346240de/go.mod h1:lrfzBEWX2zAxjfL0EYnzMinYkgsRlK7WsH/vvDSPi70=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
 github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
 github.com/sfomuseum/go-edtf v1.3.0 h1:07oBf8NcWmpwIzUz/WMgTz1huQNVdiJ/IjFzkIRGj2Q=
