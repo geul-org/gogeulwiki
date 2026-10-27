@@ -181,4 +181,4 @@ go run ./cmd/wikigeul -root ../geul-org/artifacts/geul -from 1 -to 1000 -commit 
 
 ## 라이선스
 
-MIT([LICENSE](LICENSE)). 제3자 고지는 [NOTICE](NOTICE). 위키데이터와 wikigeul이 만든 문서는 CC0.
+우리 저작물은 CC0 1.0([LICENSE](LICENSE)). 제3자 구성요소는 각자의 라이선스를 따르며 고지는 [NOTICE](NOTICE). 위키데이터와 wikigeul이 만든 문서는 CC0.
