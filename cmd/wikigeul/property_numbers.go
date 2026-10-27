@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/geul-org/wikiport/internal/port"
+	"github.com/geul-org/gogeulwiki/internal/port"
 )
 
 // propertyNumbers collects the numbers of the properties (P…) the reports

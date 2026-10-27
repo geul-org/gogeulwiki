@@ -4,8 +4,9 @@ package source
 
 import "database/sql"
 
-// loadTexts runs query (which selects language and text for $1 = id among $2
-// = langs) and returns the rows in order.
+// loadTexts runs query (which selects language, text and value_json for $1 =
+// id among $2 = langs) and returns the rows in order, each text exact
+// (exactValue).
 func loadTexts(db *sql.DB, query, id string, langs any) ([]Text, error) {
 	rows, err := db.Query(query, id, langs)
 	if err != nil {
@@ -15,9 +16,11 @@ func loadTexts(db *sql.DB, query, id string, langs any) ([]Text, error) {
 	var out []Text
 	for rows.Next() {
 		var t Text
-		if err := rows.Scan(&t.Lang, &t.Value); err != nil {
+		var exact string
+		if err := rows.Scan(&t.Lang, &t.Value, &exact); err != nil {
 			return nil, err
 		}
+		t.Value = exactValue(t.Value, exact)
 		out = append(out, t)
 	}
 	return out, rows.Err()

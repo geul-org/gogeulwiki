@@ -10,14 +10,14 @@ import (
 	"github.com/geul-org/gogeul/pkg/core"
 	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/wikiport/internal/source"
+	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
 func TestPortOne(t *testing.T) {
 	db, schema := fixtureDB(t)
 	root := t.TempDir()
 	c := config{Langs: []string{"ko", "en"}, Commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", LibCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Schema: schema, Dump: 1}
-	prov, _ := provenanceOf(source.Dump{URL: "u", Loader: wikiloadPath, LoaderCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, c.Commit, c.LibCommit)
+	prov, _ := provenanceOf(source.Dump{URL: "u", Loader: wikipgPath, LoaderCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, c.Commit, c.LibCommit)
 	rep, ok, err := portOne(db, resolve.Dir{Root: root}, "Q42", []core.Word{1, 0}, c, prov)
 	if err != nil || !ok || rep.Triples == 0 || rep.Qualifiers == 0 {
 		t.Fatalf("Q42: %+v %v %v", rep, ok, err)

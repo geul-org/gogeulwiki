@@ -8,7 +8,7 @@ import (
 
 	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/internal/publish"
+	"github.com/geul-org/gogeulwiki/internal/publish"
 )
 
 // writeIndex writes `<root>/.well-known/geul/<issuer>/documents.geul` naming

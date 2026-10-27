@@ -11,13 +11,13 @@ import (
 	"github.com/geul-org/gogeul/pkg/core"
 	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/wikiport/internal/source"
+	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
 func TestPortIDs(t *testing.T) {
 	db, schema := fixtureDB(t)
 	c := config{Langs: []string{"en"}, Commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", LibCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Schema: schema, Dump: 1}
-	prov, _ := provenanceOf(source.Dump{URL: "u", Loader: wikiloadPath, LoaderCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, c.Commit, c.LibCommit)
+	prov, _ := provenanceOf(source.Dump{URL: "u", Loader: wikipgPath, LoaderCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, c.Commit, c.LibCommit)
 	reps, written, err := portIDs(db, resolve.Dir{Root: t.TempDir()}, "Q", []uint64{1, 6}, []core.Word{1, 0}, c, prov)
 	if err != nil || len(reps) != 2 || !slices.Equal(written, []uint64{0x5100_0000_0000_0001}) {
 		t.Fatalf("got %d %v %v", len(reps), written, err)

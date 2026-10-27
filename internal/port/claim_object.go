@@ -8,7 +8,7 @@ import (
 
 	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/internal/source"
+	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
 // claimObject returns the object record of c (objectRecord) and the reason it

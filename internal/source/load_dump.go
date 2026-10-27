@@ -11,7 +11,7 @@ import (
 // and its commit). An invalid schema name or a dump_id with no row is an error.
 func LoadDump(db *sql.DB, s Store) (Dump, error) {
 	if !validSchema(s.Schema) {
-		return Dump{}, fmt.Errorf("wikiport: schema %q is not a plain identifier", s.Schema)
+		return Dump{}, fmt.Errorf("wikigeul: schema %q is not a plain identifier", s.Schema)
 	}
 	var d Dump
 	err := db.QueryRow(fmt.Sprintf("SELECT url, sha256, downloaded_at, loader, loader_commit FROM %s.dump WHERE dump_id = $1", s.Schema), s.Dump).

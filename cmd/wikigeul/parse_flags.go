@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/geul-org/wikiport/internal/port"
+	"github.com/geul-org/gogeulwiki/internal/port"
 )
 
 // parseFlags reads args into a config. -commit and -lib-commit (the full git
@@ -16,16 +16,16 @@ import (
 // TRANSFORMED-BY) are required and must be well formed (port.CommitDigest).
 // -schema and -dump-id name the loaded dump (default wikidata, 1).
 func parseFlags(args []string) (config, error) {
-	fs := flag.NewFlagSet("wikiport", flag.ContinueOnError)
+	fs := flag.NewFlagSet("wikigeul", flag.ContinueOnError)
 	var c config
 	var langs string
 	var dump int
-	fs.StringVar(&c.Root, "root", ".", "t002 root (holds .well-known/geul)")
+	fs.StringVar(&c.Root, "root", ".", "archive root holding .well-known/geul (geul-dev draft/)")
 	fs.Uint64Var(&c.From, "from", 1, "first QID number")
 	fs.Uint64Var(&c.To, "to", 1000, "last QID number")
 	fs.StringVar(&langs, "langs", "ko,en", "label, description and alias languages")
 	fs.StringVar(&c.DSN, "dsn", "", "PostgreSQL DSN (empty: PG* environment variables)")
-	fs.StringVar(&c.Schema, "schema", "wikidata", "schema of the loaded dump (wikiload -schema)")
+	fs.StringVar(&c.Schema, "schema", "wikidata", "schema of the loaded dump (wikipg -schema)")
 	fs.IntVar(&dump, "dump-id", 1, "dump_id of the loaded dump (1..255)")
 	fs.StringVar(&c.Commit, "commit", "", "porter git commit, full ID (required)")
 	fs.StringVar(&c.LibCommit, "lib-commit", "", "GEUL library git commit, full ID (required)")
@@ -39,11 +39,11 @@ func parseFlags(args []string) (config, error) {
 		}
 	}
 	if dump < 1 || dump > 255 {
-		return config{}, errors.New("wikiport: need 1 <= -dump-id <= 255")
+		return config{}, errors.New("wikigeul: need 1 <= -dump-id <= 255")
 	}
 	c.Dump = int16(dump)
 	if c.From == 0 || c.From > c.To {
-		return config{}, errors.New("wikiport: need 1 <= -from <= -to")
+		return config{}, errors.New("wikigeul: need 1 <= -from <= -to")
 	}
 	c.Langs = strings.Split(strings.ReplaceAll(langs, " ", ""), ",")
 	return c, nil

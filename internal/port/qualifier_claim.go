@@ -2,7 +2,7 @@
 //ff:what qualifierClaim — a qualifier as a claim value claimObject converts
 package port
 
-import "github.com/geul-org/wikiport/internal/source"
+import "github.com/geul-org/gogeulwiki/internal/source"
 
 // qualifierClaim returns q as a claim (property, type, datatype and value) so the value
 // converts like a main value (claimObject). Both come in the same form from

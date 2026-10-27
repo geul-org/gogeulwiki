@@ -1,0 +1,6 @@
+.tsma/
+tsma-results.jsonl
+session.json
+/wikigeul
+cmd/wikigeul/wikigeul
+report.tsv

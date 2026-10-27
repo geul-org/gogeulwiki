@@ -13,6 +13,10 @@ func TestLoadEntity(t *testing.T) {
 	if p, ok, err := LoadEntity(db, s, "P31", []string{"en"}); err != nil || !ok || p.Datatype != "wikibase-item" {
 		t.Fatalf("P31: %+v %v %v", p.Datatype, ok, err)
 	}
+	if q7, ok, err := LoadEntity(db, s, "Q7", []string{"en"}); err != nil || !ok || len(q7.Labels) != 1 || q7.Labels[0].Value != "a\x00b" ||
+		len(q7.Claims) != 1 || q7.Claims[0].Value != "x\x00" || len(q7.Claims[0].Qualifiers) != 1 || q7.Claims[0].Qualifiers[0].Value != "q\x00" {
+		t.Fatalf("Q7 (\\u0000 in value_json): %+v %v %v", q7, ok, err)
+	}
 	if _, ok, err := LoadEntity(db, s, "Q6", []string{"en"}); err != nil || ok {
 		t.Fatalf("Q6: %v %v", ok, err)
 	}

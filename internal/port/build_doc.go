@@ -7,7 +7,7 @@ import (
 
 	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/internal/source"
+	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
 // BuildDoc writes the document of entity e under issuer (README): the
@@ -22,7 +22,7 @@ func BuildDoc(e source.Entity, issuer []core.Word, p Provenance, a IDs) ([]byte,
 	prefix, n, okNum := entityNumber(e.ID)
 	subject, okRef := entityRef(e.ID)
 	if !okNum || !okRef {
-		return nil, rep, fmt.Errorf("wikiport: %q is not an item or property ID", e.ID)
+		return nil, rep, fmt.Errorf("wikigeul: %q is not an item or property ID", e.ID)
 	}
 	num, err := DocNumber(prefix, n)
 	if err != nil {

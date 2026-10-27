@@ -10,7 +10,7 @@ import (
 	"github.com/geul-org/gogeul/pkg/core"
 	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/wikiport/internal/port"
+	"github.com/geul-org/gogeulwiki/internal/port"
 )
 
 // portIDs ports prefix+n for each n under issuer with prov (portOne). It returns the reports of

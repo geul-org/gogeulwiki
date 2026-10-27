@@ -1,19 +1,22 @@
--- fixture.sql — a few entities in the wikidata schema (sql/wikidata.sql) for wikiport's DB tests.
+-- fixture.sql — a few entities in the wikidata schema (wikipg sql/wikidata.sql) for gogeulwiki's DB tests.
 -- Run after sections 1–3 with search_path set to the test schema. Q6 is left out (never created).
+-- Q7 holds \u0000 values that wikipg keeps in the *_json columns (value NULL or cleaned).
 INSERT INTO dump (dump_id, dump_date, file_name, url, size_bytes, sha256, downloaded_at, loader, loader_commit) VALUES
   (1, '2026-10-19', 'wikidata-20261019-all.json.bz2', 'https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all.json.bz2',
    103488697311, 'a249a19d12b1b0e8443248da3583090682be3f20c6bdd6ed1f7e1ae05b6b0774', '2026-10-26 06:34:43+00',
-   'github.com/geul-org/wikiport/cmd/wikiload', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
+   'github.com/geul-org/wikipg/cmd/wikipg', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
   (2, '2026-10-19', 'other.json.bz2', 'https://example.org/other', 1, '00', '2026-10-26 06:34:43+00', 'elsewhere/loader', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
 
 INSERT INTO entity (entity_id, line_no, kind, num, type, datatype, dump_id) VALUES
   ('Q1', 2, 'Q', 1, 'item', NULL, 1), ('Q2', 3, 'Q', 2, 'item', NULL, 1), ('Q3', 4, 'Q', 3, 'item', NULL, 1),
   ('Q42', 5, 'Q', 42, 'item', NULL, 1), ('P31', 6, 'P', 31, 'property', 'wikibase-item', 1),
-  ('P580', 7, 'P', 580, 'property', 'time', 1), ('Q99', 8, 'Q', 99, 'item', NULL, 2);
+  ('P580', 7, 'P', 580, 'property', 'time', 1), ('Q99', 8, 'Q', 99, 'item', NULL, 2), ('Q7', 9, 'Q', 7, 'item', NULL, 1);
 
 INSERT INTO label (entity_id, dump_id, language, value) VALUES
   ('Q1', 1, 'en', 'Universe'), ('Q2', 1, 'en', 'Earth'), ('Q42', 1, 'en', 'Douglas Adams'), ('Q42', 1, 'ko', '더글러스 애덤스'),
   ('P31', 1, 'en', 'instance of'), ('Q42', 2, 'en', 'other dump');
+INSERT INTO label (entity_id, dump_id, language, value, value_json) VALUES
+  ('Q7', 1, 'en', 'ab', '"a\u0000b"');
 INSERT INTO description (entity_id, dump_id, language, value) VALUES
   ('Q42', 1, 'en', 'English writer and humorist'), ('Q42', 1, 'ko', '영국의 작가');
 INSERT INTO alias (entity_id, dump_id, language, ordinal, value) VALUES
@@ -36,3 +39,7 @@ INSERT INTO qualifier (statement_id, ordinal, property, value_ordinal, snaktype,
   (4201, 1, 'P642', 0, 'value', 'wikibase-item', 'wikibase-entityid', '{"id": "Q1", "numeric-id": 1, "entity-type": "item"}', 'Q1'),
   (4201, 0, 'P580', 0, 'value', 'time', 'time', '{"time": "+1979-00-00T00:00:00Z", "after": 0, "before": 0, "timezone": 0, "precision": 9, "calendarmodel": "http://www.wikidata.org/entity/Q1985727"}', NULL),
   (4201, 2, 'P582', 0, 'novalue', 'time', NULL, NULL, NULL);
+INSERT INTO statement (statement_id, guid, entity_id, property, ordinal, rank, snaktype, datatype, value_type, value, value_entity, value_json, dump_id) VALUES
+  (701, 'Q7$a', 'Q7', 'P14457', 0, 'normal', 'value', 'string', 'string', NULL, NULL, '"x\u0000"', 1);
+INSERT INTO qualifier (statement_id, ordinal, property, value_ordinal, snaktype, datatype, value_type, value, value_entity, value_json) VALUES
+  (701, 0, 'P1810', 0, 'value', 'string', 'string', NULL, NULL, '"q\u0000"');

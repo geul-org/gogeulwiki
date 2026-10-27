@@ -4,8 +4,9 @@ package source
 
 import "database/sql"
 
-// loadQualifiers runs query (which selects statement ID, property, value type, datatype and
-// value of the qualifiers of $1 = id's claims) and returns the rows in order.
+// loadQualifiers runs query (which selects statement ID, property, value type, datatype,
+// value and value_json of the qualifiers of $1 = id's claims) and returns the
+// rows in order, each value exact (exactValue).
 func loadQualifiers(db *sql.DB, query, id string) ([]Qualifier, error) {
 	rows, err := db.Query(query, id)
 	if err != nil {
@@ -15,9 +16,11 @@ func loadQualifiers(db *sql.DB, query, id string) ([]Qualifier, error) {
 	var out []Qualifier
 	for rows.Next() {
 		var q Qualifier
-		if err := rows.Scan(&q.StatementID, &q.Property, &q.Type, &q.Datatype, &q.Value); err != nil {
+		var exact string
+		if err := rows.Scan(&q.StatementID, &q.Property, &q.Type, &q.Datatype, &q.Value, &exact); err != nil {
 			return nil, err
 		}
+		q.Value = exactValue(q.Value, exact)
 		out = append(out, q)
 	}
 	return out, rows.Err()

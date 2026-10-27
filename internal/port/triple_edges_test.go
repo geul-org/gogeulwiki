@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/geul-org/wikiport/internal/source"
+	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
 func TestTripleEdges(t *testing.T) {

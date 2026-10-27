@@ -10,7 +10,7 @@ import "fmt"
 // the hex reads as the kind. n must be below 2^56.
 func DocNumber(prefix byte, n uint64) (uint64, error) {
 	if n >= 1<<56 {
-		return 0, fmt.Errorf("wikiport: %c%d exceeds the 56-bit document number", prefix, n)
+		return 0, fmt.Errorf("wikigeul: %c%d exceeds the 56-bit document number", prefix, n)
 	}
 	return uint64(prefix)<<56 | n, nil
 }

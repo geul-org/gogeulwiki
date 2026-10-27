@@ -6,8 +6,8 @@ package port
 // 출처 기록): the dump URI and the SHA-256 of the file in hex (SOURCE; empty
 // when unknown), when the dump file was acquired
 // (ACQUIRED-AT, POSIX seconds) and the tools that turned it into GEUL, one
-// TRANSFORMED-BY each in order — the PostgreSQL loader, this porter and the
-// GEUL library it builds with.
+// TRANSFORMED-BY each in order — wikigeul and the GEUL library it builds
+// with (the loader is not one: it stores the dump losslessly).
 type Provenance struct {
 	DumpURI    string
 	DumpSHA256 string

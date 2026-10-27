@@ -1,5 +1,5 @@
 //ff:func feature=cli type=command control=sequence
-//ff:what main — wikiport entrypoint: run, print the error and exit 1 on failure
+//ff:what main — wikigeul entrypoint: run, print the error and exit 1 on failure
 package main
 
 import (
@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-// main runs wikiport (README) and exits 1 on an error.
+// main runs wikigeul (README) and exits 1 on an error.
 func main() {
 	if err := run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)

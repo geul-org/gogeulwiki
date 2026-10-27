@@ -3,7 +3,7 @@
 package source
 
 // Store names one loaded dump (sql/wikidata.sql): the schema that holds the
-// tables (wikiload -schema) and the dump_id of the dump within it (wikiload
+// tables (wikipg -schema) and the dump_id of the dump within it (wikipg
 // -dump-id). Every query reads that dump only.
 type Store struct {
 	Schema string

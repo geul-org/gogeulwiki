@@ -18,7 +18,7 @@ func fileDigest(sum string) (core.Record, error) {
 	case sum == "":
 		return core.Record{Kind: core.KindReference}, nil
 	case err != nil || len(b) != 32:
-		return core.Record{}, fmt.Errorf("wikiport: dump SHA-256 %q is not 64 hex digits", sum)
+		return core.Record{}, fmt.Errorf("wikigeul: dump SHA-256 %q is not 64 hex digits", sum)
 	}
 	return core.Record{Kind: core.KindValue, Codec: core.CodecSHA256Digest, Payload: digestWords(b)}, nil
 }

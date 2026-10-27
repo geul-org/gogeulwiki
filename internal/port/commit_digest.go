@@ -18,11 +18,11 @@ func CommitDigest(id string) (core.Record, error) {
 	codec := core.CodecSHA1Digest
 	switch {
 	case err != nil:
-		return core.Record{}, fmt.Errorf("wikiport: commit %q is not hex", id)
+		return core.Record{}, fmt.Errorf("wikigeul: commit %q is not hex", id)
 	case len(b) == 32:
 		codec = core.CodecSHA256Digest
 	case len(b) != 20:
-		return core.Record{}, fmt.Errorf("wikiport: commit %q is not a full SHA-1 or SHA-256 object ID", id)
+		return core.Record{}, fmt.Errorf("wikigeul: commit %q is not a full SHA-1 or SHA-256 object ID", id)
 	}
 	return core.Record{Kind: core.KindValue, Codec: codec, Payload: digestWords(b)}, nil
 }

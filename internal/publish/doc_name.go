@@ -14,7 +14,7 @@ import (
 func docName(n uint64) (string, error) {
 	letter := n >> 56
 	if letter < 'A' || letter > 'Z' {
-		return "", fmt.Errorf("wikiport: document 0x%016x has no kind letter", n)
+		return "", fmt.Errorf("wikigeul: document 0x%016x has no kind letter", n)
 	}
 	return string(rune(letter+'a'-'A')) + strconv.FormatUint(n&(1<<56-1), 10), nil
 }
