@@ -3,7 +3,7 @@
 위키데이터를 GEUL 문서로 바꾸는 도구 `wikigeul`. [wikipg](https://github.com/geul-org/wikipg)가 PostgreSQL에 적재한 덤프를 읽어, 항목·속성을 GEUL 문서로 만들어 `.well-known/geul/` 아래에 공표한다. 출처·근거 기록(geul-dev files/geul/sign.md, legacy.md)의 실전 시험대이기도 하다.
 
 - 저장소: [geul-org/gogeulwiki](https://github.com/geul-org/gogeulwiki). 2026-10-27 wikiport(지금 wikipg)에서 변환 코드(옛 `cmd/wikiport`)를 이력째 옮겨 왔다(`git filter-repo`, 옛 커밋에 섞여 있던 바이너리는 뺐다). 모듈 경로는 `github.com/geul-org/gogeulwiki`.
-- 의존: 라이브러리 [gogeul](https://github.com/geul-org/gogeul), 적재 스키마 [wikipg](https://github.com/geul-org/wikipg)(테스트만 `sql.Schema`를 씀). `go.mod`는 공개 커밋의 pseudo-version을 require하고 `replace`는 두지 않는다. 로컬 개발은 geul-dev `draft/` 아래에 세 저장소를 나란히 두고 `draft/go.work` 워크스페이스로 묶는다(각 저장소 `.gitignore`가 `go.work`를 제외). 의존 올리기: gogeul(또는 wikipg)을 푸시한 뒤 `GOWORK=off go get github.com/geul-org/gogeul@<커밋> && GOWORK=off go mod tidy`. 명세: [geul-org/geul-dev](https://github.com/geul-org/geul-dev) `files/geul/docs/`.
+- 의존: 라이브러리 [gogeul](https://github.com/geul-org/gogeul), 적재 스키마 [wikipg](https://github.com/geul-org/wikipg)(테스트만 `sql.Schema`를 씀). `go.mod`는 공개 커밋의 pseudo-version을 require하고 `replace`는 두지 않는다. 로컬 개발은 geul-dev `draft/` 아래에 세 저장소를 나란히 두고 `draft/go.work` 워크스페이스로 묶는다(각 저장소 `.gitignore`가 `go.work`를 제외). 의존 올리기: gogeul(또는 wikipg)을 푸시한 뒤 `GOWORK=off go get github.com/geul-org/gogeul@<커밋> && GOWORK=off go mod tidy`. 명세: [geul.org 문법](https://geul.org/ko/grammar/)(SSOT).
 
 ```
 cmd/wikigeul/      DB → GEUL 문서 공표(범위 반복, 속성 문서, 이름 색인, 보고서)
