@@ -4,3 +4,8 @@ session.json
 /wikigeul
 cmd/wikigeul/wikigeul
 report.tsv
+
+# 비밀 (보안 점검 2026-10-27)
+.env*
+*.key
+*.pem
