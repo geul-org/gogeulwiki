@@ -60,12 +60,12 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
 | `dump` | `url`, `sha256`, `downloaded_at`, `loader`, `loader_commit` (출처 기록) |
 | `entity` | `entity_id` (있는지) |
 | `label`, `description`, `alias` | `language`, `value` (모든 언어, 언어 코드 바이트 순. 별칭은 그 안에서 `ordinal` 순) |
-| `statement` | `statement_id`(wikipg가 속성 ID 문자열 순으로 매긴다. 속성 안에서는 덤프 순), `property`, `rank`, `value_type`, `value`(jsonb), `value_entity` |
-| `qualifier` | `statement_id`, `ordinal`(qualifiers-order), `property`, `value_type`, `value`, `value_entity` |
+| `statement` | `statement_id`(wikipg가 속성 ID 문자열 순으로 매긴다. 속성 안에서는 덤프 순), `property`, `rank`, `snaktype`, `value_type`, `value`(jsonb), `value_entity` |
+| `qualifier` | `statement_id`, `ordinal`(qualifiers-order), `property`, `snaktype`, `value_type`, `value`, `value_entity` |
 | `sitelink` | `site`, `title`(`title_json`), `badges` (사이트 ID 바이트 순 = 덤프 키 순) |
 
 - 모든 질의는 `dump_id`로 한 판만 읽는다(`-dump-id`).
-- 값은 개체면 맨 ID(`value_entity`), 문자열이면 따옴표 없는 문자열, 그 밖은 datavalue JSON(jsonb의 공백·키 순서)이다. `\u0000`이 든 값은 wikipg가 `value_json`(레이블·별칭·설명도 `value_json`)에 원문 JSON으로 두므로 그것을 읽는다(`exactValue`). novalue·somevalue는 빈 값이라 건너뛴다(보고서 `값 없음`).
+- 값은 개체면 맨 ID(`value_entity`), 문자열이면 따옴표 없는 문자열, 그 밖은 datavalue JSON(jsonb의 공백·키 순서)이다. `\u0000`이 든 값은 wikipg가 `value_json`(레이블·별칭·설명도 `value_json`)에 원문 JSON으로 두므로 그것을 읽는다(`exactValue`). novalue·somevalue는 값이 비어 있고 `snaktype` 열로 구별한다(자리 표지로 옮긴다, 아래 값 변환). 값 snak인데 값이 빈 것만 건너뛴다(보고서 `빈 값`).
 - 본 값과 qualifier 값이 같은 형태다(이전 DB는 qualifier 개체만 JSON이었다).
 
 ## 작업 범위 (2026-10-25 결정)
@@ -118,7 +118,7 @@ go run ./cmd/wikigeul -root ../geul-org/artifacts/geul -from 1 -to 1000 -commit 
 | `-from`, `-to` | QID 범위 | 1, 1000 |
 | `-commit` | TRANSFORMED-BY에 남길 변환 도구 커밋, 전체 ID (필수) | |
 | `-lib-commit` | TRANSFORMED-BY에 남길 GEUL 라이브러리 커밋, 전체 ID (필수) | |
-| `-report` | 개체별 건수·건너뛴 사유·원문 보존 날짜의 사유 TSV (첫 줄은 `# wikigeul -from … -to … -schema … -dump-id … -commit … -lib-commit …` 실행 기록, 다음 줄이 머리글. 열: id, labels, descriptions, aliases, triples, qualifiers, sitelinks, badges, skipped, raw. qualifier 사유는 `qualifier ` 접두) | 없음 |
+| `-report` | 개체별 건수·건너뛴 사유·원문 보존 날짜의 사유 TSV (첫 줄은 `# wikigeul -from … -to … -schema … -dump-id … -commit … -lib-commit …` 실행 기록, 다음 줄이 머리글. 열: id, labels, descriptions, aliases, triples, qualifiers, sitelinks, badges, skipped, raw, markers. markers는 somevalue·novalue를 옮긴 자리 표지 수(`UNKNOWN-VALUE`, `NO-VALUE`). qualifier 사유·표지는 `qualifier ` 접두) | 없음 |
 | `-dsn` | PostgreSQL DSN | 비우면 PG* 환경변수 |
 | `-schema` | 적재된 덤프의 스키마(wikipg `-schema`) | `wikidata` |
 | `-dump-id` | 읽을 판(wikipg `-dump-id`) | 1 |
@@ -140,11 +140,12 @@ go run ./cmd/wikigeul -root ../geul-org/artifacts/geul -from 1 -to 1000 -commit 
 | time, 그레고리력 월·연·10년 정밀도 | EDTF |
 | time, 율리우스력 일·월·연 정밀도 | GEDCOM-DATE (`JULIAN 14 OCT 1066`) |
 | time, 그 밖(세기 이상 정밀도, 시간대·오차 범위 등) | datavalue JSON 원문을 UTF8-TEXT로. 날짜는 건너뛰지 않는다 |
-| novalue, somevalue | 건너뜀 (DB에 값이 비어 있다) |
+| somevalue (본 값, qualifier) | 자리 표지 UNKNOWN-VALUE `0x0001` (알 수 없음: 값이 있다, 무엇인지 모른다). TRIPLE Object·QUALIFIER Value. rank·qualifier 순서는 그대로 |
+| novalue (본 값, qualifier) | 자리 표지 NO-VALUE `0x0002` (없음: 값이 없다, 그 qualifier 범위 안에서). 본 값 novalue의 값 qualifier(P580·P582 등)도 함께 옮긴다 |
 | monolingualtext | UTF8-LANGUAGE-TEXT (언어는 LANGUAGE-BCP47-CODE, 아래 언어 코드 대응). 그래도 BCP 47 형식이 아니면(빈 언어) datavalue 원문을 UTF8-TEXT로 |
 | globecoordinate | 지구(Q2)는 COORDINATE-EARTH, 다른 천체는 COORDINATE-GEO(천체 = WIKIDATA-QID). 지구 좌표의 불확도는 precision에서 Georeferencing Best Practices 3.4.3 방법으로(정밀도 기인 불확도의 하한), 다른 천체와 precision 없음은 미상. 천체 없음·고도 있음·범위 밖·이상한 precision은 datavalue 원문을 UTF8-TEXT로 |
-| quantity | QUANTITY(amount·단위·하한·상한, docs/value/numeric/QUANTITY). 수와 경계는 자릿수 그대로, 단위 `1`은 무단위(없음 표지), 위키데이터 항목 단위는 WIKIDATA-QID. 그 밖의 단위·형식은 원문 UTF8-TEXT |
-| 그 밖(Lexeme 값 등) | 건너뜀 (이번 범위 밖) |
+| quantity | QUANTITY(amount·단위·하한·상한, docs/value/numeric/QUANTITY). 수와 경계는 자릿수 그대로, 단위 `1`은 무단위(ABSENT 표지), 위키데이터 항목 단위는 WIKIDATA-QID. 그 밖의 단위·형식은 원문 UTF8-TEXT |
+| 그 밖(Lexeme 값 등) | 건너뜀 (이번 범위 밖). "옮기지 못함"은 표지로 쓰지 않는다(원천에는 값이 있으므로 UNKNOWN-VALUE가 아니다) |
 
 - 레이블·설명·별칭은 LABEL·DESCRIPTION·ALIAS(Edge Id, Subject, Object, `entity_descriptions`의 빈 설명은 건너뜀)이고 Object는 UTF8-LANGUAGE-TEXT, 언어는 LANGUAGE-BCP47-CODE(GEUL 언어 레지스트리 전). 언어 코드는 BCP 47 형식만 확인한다.
 

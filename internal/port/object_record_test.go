@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=iteration dimension=1
-//ff:what TestObjectRecord — entity IDs, strings, dates, monolingual texts and coordinates convert; a url becomes a URI, a quantity a QUANTITY; an unconvertible date has its time reason; empty, lexeme, invalid UTF-8 and unsupported values are skipped
+//ff:what TestObjectRecord — entity IDs, strings, dates, monolingual texts and coordinates convert; a url becomes a URI, a quantity a QUANTITY; somevalue and novalue become UNKNOWN-VALUE and NO-VALUE; an unconvertible date has its time reason; an empty value, lexeme, invalid UTF-8 and unsupported values are skipped
 package port
 
 import (
@@ -41,8 +41,14 @@ func TestObjectRecord(t *testing.T) {
 	if ws := enc(source.Claim{Type: "globecoordinate", Value: `{"latitude":1,"longitude":2,"precision":null,"globe":"http://www.wikidata.org/entity/Q2"}`}); ws[0] != 0x0D04 {
 		t.Fatalf("coordinate: %04X", ws)
 	}
+	if ws := enc(source.Claim{SnakType: "somevalue"}); !slices.Equal(ws, []core.Word{core.UnknownValue}) {
+		t.Fatalf("somevalue: %04X", ws)
+	}
+	if ws := enc(source.Claim{Type: "wikibase-item", SnakType: "novalue"}); !slices.Equal(ws, []core.Word{core.NoValue}) {
+		t.Fatalf("novalue: %04X", ws)
+	}
 	for want, c := range map[string]source.Claim{
-		"값 없음(novalue·somevalue)":    {Type: "wikibase-item"},
+		"빈 값":                        {Type: "wikibase-item", SnakType: "value"},
 		"개체: L":                      {Type: "wikibase-entityid", Value: "L16"},
 		"문자열: UTF-8 아님":              {Type: "external-id", Value: "\xff"},
 		"형식 미지원: unknown":            {Type: "unknown", Value: "{}"},

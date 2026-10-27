@@ -2,6 +2,7 @@
 -- Run after sections 1–3 with search_path set to the test schema. Q6 is left out (never created).
 -- Q42 has labels in three languages (mul included) and sitelinks of several sites, one unknown.
 -- Q7 holds \u0000 values that wikipg keeps in the *_json columns (value NULL or cleaned).
+-- Q30 holds special snaks: a border whose end (P582) is somevalue, a novalue central bank (P1304) with time qualifiers, a somevalue main snak.
 INSERT INTO dump (dump_id, dump_date, file_name, url, size_bytes, sha256, downloaded_at, loader, loader_commit) VALUES
   (1, '2026-10-19', 'wikidata-20261019-all.json.bz2', 'https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all.json.bz2',
    103488697311, 'a249a19d12b1b0e8443248da3583090682be3f20c6bdd6ed1f7e1ae05b6b0774', '2026-10-26 06:34:43+00',
@@ -11,7 +12,8 @@ INSERT INTO dump (dump_id, dump_date, file_name, url, size_bytes, sha256, downlo
 INSERT INTO entity (entity_id, line_no, kind, num, type, datatype, dump_id) VALUES
   ('Q1', 2, 'Q', 1, 'item', NULL, 1), ('Q2', 3, 'Q', 2, 'item', NULL, 1), ('Q3', 4, 'Q', 3, 'item', NULL, 1),
   ('Q42', 5, 'Q', 42, 'item', NULL, 1), ('P31', 6, 'P', 31, 'property', 'wikibase-item', 1),
-  ('P580', 7, 'P', 580, 'property', 'time', 1), ('Q99', 8, 'Q', 99, 'item', NULL, 2), ('Q7', 9, 'Q', 7, 'item', NULL, 1);
+  ('P580', 7, 'P', 580, 'property', 'time', 1), ('Q99', 8, 'Q', 99, 'item', NULL, 2), ('Q7', 9, 'Q', 7, 'item', NULL, 1),
+  ('Q30', 10, 'Q', 30, 'item', NULL, 1);
 
 INSERT INTO label (entity_id, dump_id, language, value) VALUES
   ('Q1', 1, 'en', 'Universe'), ('Q2', 1, 'en', 'Earth'), ('Q42', 1, 'en', 'Douglas Adams'), ('Q42', 1, 'ko', '더글러스 애덤스'), ('Q42', 1, 'mul', 'Douglas Adams'),
@@ -44,6 +46,15 @@ INSERT INTO statement (statement_id, guid, entity_id, property, ordinal, rank, s
   (701, 'Q7$a', 'Q7', 'P14457', 0, 'normal', 'value', 'string', 'string', NULL, NULL, '"x\u0000"', 1);
 INSERT INTO qualifier (statement_id, ordinal, property, value_ordinal, snaktype, datatype, value_type, value, value_entity, value_json) VALUES
   (701, 0, 'P1810', 0, 'value', 'string', 'string', NULL, NULL, '"q\u0000"');
+
+INSERT INTO statement (statement_id, guid, entity_id, property, ordinal, rank, snaktype, datatype, value_type, value, value_entity, dump_id) VALUES
+  (3001, 'Q30$a', 'Q30', 'P1304', 0, 'normal', 'novalue', 'wikibase-item', NULL, NULL, NULL, 1),
+  (3002, 'Q30$b', 'Q30', 'P35', 0, 'deprecated', 'somevalue', 'wikibase-item', NULL, NULL, NULL, 1),
+  (3003, 'Q30$c', 'Q30', 'P47', 0, 'normal', 'value', 'wikibase-item', 'wikibase-entityid', '{"id": "Q34266", "numeric-id": 34266, "entity-type": "item"}', 'Q34266', 1);
+INSERT INTO qualifier (statement_id, ordinal, property, value_ordinal, snaktype, datatype, value_type, value, value_entity) VALUES
+  (3001, 0, 'P580', 0, 'value', 'time', 'time', '{"time": "+1811-00-00T00:00:00Z", "after": 0, "before": 0, "timezone": 0, "precision": 9, "calendarmodel": "http://www.wikidata.org/entity/Q1985727"}', NULL),
+  (3001, 1, 'P582', 0, 'value', 'time', 'time', '{"time": "+1816-00-00T00:00:00Z", "after": 0, "before": 0, "timezone": 0, "precision": 9, "calendarmodel": "http://www.wikidata.org/entity/Q1985727"}', NULL),
+  (3003, 0, 'P582', 0, 'somevalue', 'time', NULL, NULL, NULL);
 
 INSERT INTO sitelink (entity_id, dump_id, site, title, badges) VALUES
   ('Q42', 1, 'enwiki', 'Douglas Adams', '{Q17437796}'), ('Q42', 1, 'kowiki', '더글러스 애덤스', '{}'),

@@ -1,5 +1,5 @@
 //ff:func feature=source type=loader control=sequence
-//ff:what TestLoadEntity — Q42 with labels, descriptions, aliases (every language), claims and sitelinks of its dump only, P31 with its datatype; a missing ID is false; a bad schema and a closed handle error
+//ff:what TestLoadEntity — Q42 with labels, descriptions, aliases (every language), claims and sitelinks of its dump only, P31 with its datatype; Q30 with novalue/somevalue snak types; a missing ID is false; a bad schema and a closed handle error
 package source
 
 import "testing"
@@ -16,6 +16,10 @@ func TestLoadEntity(t *testing.T) {
 	if q7, ok, err := LoadEntity(db, s, "Q7"); err != nil || !ok || len(q7.Labels) != 1 || q7.Labels[0].Value != "a\x00b" || len(q7.Sitelinks) != 1 || q7.Sitelinks[0].Title != "a\x00b" ||
 		len(q7.Claims) != 1 || q7.Claims[0].Value != "x\x00" || len(q7.Claims[0].Qualifiers) != 1 || q7.Claims[0].Qualifiers[0].Value != "q\x00" {
 		t.Fatalf("Q7 (\\u0000 in value_json): %+v %v %v", q7, ok, err)
+	}
+	if q30, ok, err := LoadEntity(db, s, "Q30"); err != nil || !ok || len(q30.Claims) != 3 || q30.Claims[0].SnakType != "novalue" || len(q30.Claims[0].Qualifiers) != 2 ||
+		q30.Claims[1].SnakType != "somevalue" || len(q30.Claims[2].Qualifiers) != 1 || q30.Claims[2].Qualifiers[0].SnakType != "somevalue" || q30.Claims[2].Qualifiers[0].Value != "" {
+		t.Fatalf("Q30 (special snaks): %+v %v %v", q30, ok, err)
 	}
 	if _, ok, err := LoadEntity(db, s, "Q6"); err != nil || ok {
 		t.Fatalf("Q6: %v %v", ok, err)

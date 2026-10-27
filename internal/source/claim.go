@@ -1,5 +1,5 @@
 //ff:type feature=source type=model
-//ff:what Claim — one Wikidata statement of a loaded dump: ID, property, value type, datatype, value, rank, and its qualifiers
+//ff:what Claim — one Wikidata statement of a loaded dump: ID, property, value type, datatype, value, rank, snak type, and its qualifiers
 package source
 
 // Claim is one statement of a loaded dump (sql/wikidata.sql statement): its
@@ -8,7 +8,8 @@ package source
 // quantity …), the property's datatype (url, commonsMedia, external-id …;
 // a string value carries several), the value (queriesFor: a bare entity ID, an unquoted string or
 // the datavalue JSON; empty for novalue and somevalue), the rank (preferred,
-// normal, deprecated) and its qualifiers in dump order.
+// normal, deprecated), the main snak's type (value, somevalue, novalue) and
+// its qualifiers in dump order.
 type Claim struct {
 	ID         int64
 	Property   string
@@ -16,5 +17,6 @@ type Claim struct {
 	Datatype   string
 	Value      string
 	Rank       string
+	SnakType   string
 	Qualifiers []Qualifier
 }

@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=sequence
-//ff:what TestTripleEdges — convertible claims become TRIPLEs, each followed by its QUALIFIERs; bad predicates, values and ranks are counted, raw-kept dates too; properties used are collected
+//ff:what TestTripleEdges — convertible claims become TRIPLEs, each followed by its QUALIFIERs; bad predicates, values and ranks are counted, raw-kept dates too; somevalue/novalue become slot markers and are counted; properties used are collected
 package port
 
 import (
@@ -20,17 +20,18 @@ func TestTripleEdges(t *testing.T) {
 		{Property: "P2", Type: "unknown", Value: "{}", Rank: "normal"},
 		{Property: "P3", Type: "string", Value: "a", Rank: "odd"},
 		{Property: "P585", Type: "time", Value: "x", Rank: "normal"},
+		{Property: "P40", SnakType: "novalue", Rank: "normal", Qualifiers: []source.Qualifier{{Property: "P582", SnakType: "somevalue"}}},
 	}, &rep)
-	if rep.Raw["time: JSON 아님"] != 1 || rep.Raw["qualifier time: JSON 아님"] != 1 || rep.Triples != 3 || rep.Qualifiers != 1 {
+	if rep.Raw["time: JSON 아님"] != 1 || rep.Raw["qualifier time: JSON 아님"] != 1 || rep.Triples != 4 || rep.Qualifiers != 2 || rep.Markers["NO-VALUE"] != 1 || rep.Markers["qualifier UNKNOWN-VALUE"] != 1 {
 		t.Fatalf("raw %v", rep.Raw)
 	}
-	if len(rs) != 4 || ids.Next() != 5 || rs[0].Codec != edgeTriple || rs[1].Codec != edgeQualifier || rs[1].Payload[5] != 1 || rs[2].Payload[len(rs[2].Payload)-1] != 1 {
+	if len(rs) != 6 || ids.Next() != 7 || rs[4].Payload[len(rs[4].Payload)-2] != 0x0002 || rs[5].Payload[len(rs[5].Payload)-1] != 0x0001 || rs[0].Codec != edgeTriple || rs[1].Codec != edgeQualifier || rs[1].Payload[5] != 1 || rs[2].Payload[len(rs[2].Payload)-1] != 1 {
 		t.Fatalf("got %d next %d", len(rs), ids.Next())
 	}
 	if rep.Skipped["속성 ID: X1"] != 1 || rep.Skipped["형식 미지원: unknown"] != 1 || rep.Skipped["rank: odd"] != 1 {
 		t.Fatalf("skipped %v", rep.Skipped)
 	}
-	if !slices.Equal(rep.Properties, []string{"P31", "P580", "P1659", "P279", "P585"}) {
+	if !slices.Equal(rep.Properties, []string{"P31", "P580", "P1659", "P279", "P585", "P40", "P582"}) {
 		t.Fatalf("properties %v", rep.Properties)
 	}
 }

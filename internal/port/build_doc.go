@@ -19,7 +19,7 @@ import (
 // take the next (OVERVIEW 개정, delta.LocalIDs). The document ID is the
 // DocNumber of e's ID (its letter and number). The report counts what was written and skipped.
 func BuildDoc(e source.Entity, issuer []core.Word, p Provenance, a IDs) ([]byte, Report, error) {
-	rep := Report{ID: e.ID, Skipped: map[string]int{}, Raw: map[string]int{}}
+	rep := Report{ID: e.ID, Skipped: map[string]int{}, Raw: map[string]int{}, Markers: map[string]int{}}
 	prefix, n, okNum := entityNumber(e.ID)
 	subject, okRef := entityRef(e.ID)
 	if !okNum || !okRef {

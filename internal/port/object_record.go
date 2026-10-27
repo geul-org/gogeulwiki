@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=selection
-//ff:what objectRecord — the GEUL object record of a claim value (entity, string or URI, time, monolingual text, coordinate); otherwise the reason the claim is skipped
+//ff:what objectRecord — the GEUL object record of a claim value (somevalue/novalue slot marker, entity, string or URI, time, monolingual text, coordinate); otherwise the reason the claim is skipped
 package port
 
 import (
@@ -15,13 +15,16 @@ import (
 // (monolingualRecord), a globecoordinate to COORDINATE-EARTH or -GEO
 // (coordinateRecord), a quantity to QUANTITY (quantityRecord). A time or coordinate that cannot be converted has a
 // "time: …" or "globecoordinate: …" reason; claimObject keeps it as original
-// text. An empty value is a novalue
-// or somevalue snak. Other value
+// text. A somevalue or novalue snak is its slot marker UNKNOWN-VALUE or
+// NO-VALUE (snakMarker); an empty value of a value snak is skipped. Other value
 // types are not converted in this pass (README 작업 범위); the reason
 // names what was skipped.
 func objectRecord(c source.Claim) (core.Record, string) {
+	if m, ok := snakMarker(c.SnakType); ok {
+		return m, ""
+	}
 	if c.Value == "" {
-		return core.Record{}, "값 없음(novalue·somevalue)"
+		return core.Record{}, "빈 값"
 	}
 	switch c.Type {
 	case "wikibase-entityid", "wikibase-item", "wikibase-property":

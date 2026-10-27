@@ -12,8 +12,9 @@ import (
 // value and rank convert, each followed by its QUALIFIERs (qualifierEdges),
 // numbering Edge Ids from *next. Every other claim is
 // counted in rep.Skipped by reason, a date kept as original text in rep.Raw
-// by its conversion reason (claimObject), and every property used as a predicate or
-// a value is added to rep.Properties.
+// by its conversion reason (claimObject), a somevalue or novalue object written
+// as its slot marker counted in rep.Markers, and every property used as a
+// predicate or a value is added to rep.Properties.
 func tripleEdges(a IDs, subject core.Record, claims []source.Claim, rep *Report) []core.Record {
 	var out []core.Record
 	for _, c := range claims {
@@ -34,6 +35,7 @@ func tripleEdges(a IDs, subject core.Record, claims []source.Claim, rep *Report)
 			rep.Raw[raw]++
 		}
 		rep.Properties = append(rep.Properties, propertiesOf(c)...)
+		countMarker(rep, "", obj)
 		r, id := tripleEdge(a, pred, subject, obj, rank)
 		out = append(out, r)
 		rep.Triples++
