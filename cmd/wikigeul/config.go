@@ -2,7 +2,7 @@
 //ff:what config — the wikigeul run settings: tree root, QID range, languages, DB DSN, loaded dump, porter and library commits, report path
 package main
 
-// config is one wikigeul run: the archive root (geul-dev draft/) whose .well-known/geul receives
+// config is one wikigeul run: the archive root (geul-dev draft/geul-org/artifacts/geul) whose .well-known/geul receives
 // the documents, the QID range [From, To], the label/description/alias
 // languages, the PostgreSQL DSN (empty: lib/pq reads the PG* environment
 // variables), the loaded dump to read (schema and dump_id, sql/wikidata.sql),

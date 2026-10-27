@@ -107,12 +107,12 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
 ```sh
 cd draft/gogeulwiki
 # DB 접속은 lib/pq의 PG* 환경변수(PGHOST, PGUSER, PGPASSWORD, PGDATABASE=geuldev, PGSSLMODE)로 한다.
-go run ./cmd/wikigeul -root .. -from 1 -to 1000 -commit "$(git rev-parse HEAD)" -lib-commit "$(git -C ../gogeul rev-parse HEAD)" -report report.tsv
+go run ./cmd/wikigeul -root ../geul-org/artifacts/geul -from 1 -to 1000 -commit "$(git rev-parse HEAD)" -lib-commit "$(git -C ../gogeul rev-parse HEAD)" -report report.tsv
 ```
 
 | 플래그 | 뜻 | 기본값 |
 |---|---|---|
-| `-root` | `.well-known/geul`을 담은 아카이브 루트(geul-dev `draft/`) | `.` |
+| `-root` | `.well-known/geul`을 담은 아카이브 루트(geul-dev `draft/geul-org/artifacts/geul`) | `.` |
 | `-from`, `-to` | QID 범위 | 1, 1000 |
 | `-langs` | 레이블·설명·별칭 언어 | `ko,en` |
 | `-commit` | TRANSFORMED-BY에 남길 변환 도구 커밋, 전체 ID (필수) | |
