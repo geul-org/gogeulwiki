@@ -12,7 +12,7 @@ func TestRun(t *testing.T) {
 	_, schema := fixtureDB(t)
 	root := t.TempDir()
 	report := filepath.Join(root, "r.tsv")
-	if err := run([]string{"-root", root, "-from", "1", "-to", "3", "-langs", "en", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema, "-report", report}); err != nil {
+	if err := run([]string{"-root", root, "-from", "1", "-to", "3", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema, "-report", report}); err != nil {
 		t.Fatal(err)
 	}
 	for _, p := range []string{".well-known/geul/0x00010000/documents.geul", ".well-known/geul/0x00010000/0x500000000000001f", "r.tsv"} {
@@ -20,7 +20,7 @@ func TestRun(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	if err := run([]string{"-root", root, "-from", "1", "-to", "1", "-langs", "en", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err != nil {
+	if err := run([]string{"-root", root, "-from", "1", "-to", "1", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err != nil {
 		t.Fatalf("no report: %v", err)
 	}
 	if err := run(nil); err == nil {
@@ -50,7 +50,7 @@ func TestRun(t *testing.T) {
 		r := t.TempDir()
 		os.MkdirAll(filepath.Dir(filepath.Join(r, ".well-known/geul", c.file)), 0o755)
 		os.WriteFile(filepath.Join(r, ".well-known/geul", c.file), nil, 0o644)
-		if err := run([]string{"-root", r, "-from", c.from, "-to", c.from, "-langs", "en", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
+		if err := run([]string{"-root", r, "-from", c.from, "-to", c.from, "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
 			t.Fatalf("%s file, Q%s: want error", c.file, c.from)
 		}
 	}

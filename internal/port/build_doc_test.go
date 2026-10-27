@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=sequence
-//ff:what TestBuildDoc — a full document with LABEL, DESCRIPTION, ALIAS, a TRIPLE and its QUALIFIER passes schema with its DOC-ID (Q in the top byte) and counts; a property states its datatype; a bad ID and a bad Issuer fail
+//ff:what TestBuildDoc — a full document with LABEL, DESCRIPTION, ALIAS, a TRIPLE and its QUALIFIER, then a sitelink with its badge, passes schema with its DOC-ID (Q in the top byte) and counts; a property states its datatype; a bad ID and a bad Issuer fail
 package port
 
 import (
@@ -22,9 +22,10 @@ func TestBuildDoc(t *testing.T) {
 			{Property: "P31", Type: "wikibase-entityid", Value: "Q5", Rank: "normal", Qualifiers: []source.Qualifier{{Property: "P642", Type: "wikibase-entityid", Value: "Q1"}}},
 			{Property: "P2", Type: "unknown", Rank: "normal", Value: "{}"},
 		},
+		Sitelinks: []source.Sitelink{{Site: "enwiki", Title: "Douglas Adams", Badges: []string{"Q17437796"}}},
 	}
 	b, rep, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1))
-	if err != nil || rep.Labels != 1 || rep.Descriptions != 1 || rep.Aliases != 1 || rep.Triples != 1 || rep.Qualifiers != 1 || rep.Skipped["형식 미지원: unknown"] != 1 {
+	if err != nil || rep.Labels != 1 || rep.Descriptions != 1 || rep.Aliases != 1 || rep.Triples != 1 || rep.Qualifiers != 1 || rep.Sitelinks != 1 || rep.Badges != 1 || rep.Skipped["형식 미지원: unknown"] != 1 {
 		t.Fatalf("report %+v %v", rep, err)
 	}
 	if fs := schema.Check(b, schema.Options{}).Facts; len(fs) != 0 {
@@ -37,7 +38,8 @@ func TestBuildDoc(t *testing.T) {
 		t.Fatalf("DOC-ID: %04X %v", doc, err)
 	}
 	d, _ := inspect.Decode(b)
-	if len(d.Body) != 5 || d.Body[1].Record.Codec != edgeDescription || d.Body[2].Record.Codec != edgeAlias || d.Body[3].ID != 4 || d.Body[4].ID != 5 {
+	if len(d.Body) != 10 || d.Body[1].Record.Codec != edgeDescription || d.Body[2].Record.Codec != edgeAlias || d.Body[3].ID != 4 || d.Body[4].ID != 5 ||
+		d.Body[5].Record.Codec != edgeReferenceNode || d.Body[7].Record.Codec != edgeTriple || d.Body[9].Record.Codec != edgeTriple {
 		t.Fatalf("body %+v", d.Body)
 	}
 	pb, prep, err := BuildDoc(source.Entity{ID: "P214", Datatype: "external-id"}, []core.Word{1, 0}, prov(), freshIDs(1))

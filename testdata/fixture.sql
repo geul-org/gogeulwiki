@@ -1,5 +1,6 @@
 -- fixture.sql — a few entities in the wikidata schema (wikipg sql/wikidata.sql) for gogeulwiki's DB tests.
 -- Run after sections 1–3 with search_path set to the test schema. Q6 is left out (never created).
+-- Q42 has labels in three languages (mul included) and sitelinks of several sites, one unknown.
 -- Q7 holds \u0000 values that wikipg keeps in the *_json columns (value NULL or cleaned).
 INSERT INTO dump (dump_id, dump_date, file_name, url, size_bytes, sha256, downloaded_at, loader, loader_commit) VALUES
   (1, '2026-10-19', 'wikidata-20261019-all.json.bz2', 'https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all.json.bz2',
@@ -13,7 +14,7 @@ INSERT INTO entity (entity_id, line_no, kind, num, type, datatype, dump_id) VALU
   ('P580', 7, 'P', 580, 'property', 'time', 1), ('Q99', 8, 'Q', 99, 'item', NULL, 2), ('Q7', 9, 'Q', 7, 'item', NULL, 1);
 
 INSERT INTO label (entity_id, dump_id, language, value) VALUES
-  ('Q1', 1, 'en', 'Universe'), ('Q2', 1, 'en', 'Earth'), ('Q42', 1, 'en', 'Douglas Adams'), ('Q42', 1, 'ko', '더글러스 애덤스'),
+  ('Q1', 1, 'en', 'Universe'), ('Q2', 1, 'en', 'Earth'), ('Q42', 1, 'en', 'Douglas Adams'), ('Q42', 1, 'ko', '더글러스 애덤스'), ('Q42', 1, 'mul', 'Douglas Adams'),
   ('P31', 1, 'en', 'instance of'), ('Q42', 2, 'en', 'other dump');
 INSERT INTO label (entity_id, dump_id, language, value, value_json) VALUES
   ('Q7', 1, 'en', 'ab', '"a\u0000b"');
@@ -43,3 +44,11 @@ INSERT INTO statement (statement_id, guid, entity_id, property, ordinal, rank, s
   (701, 'Q7$a', 'Q7', 'P14457', 0, 'normal', 'value', 'string', 'string', NULL, NULL, '"x\u0000"', 1);
 INSERT INTO qualifier (statement_id, ordinal, property, value_ordinal, snaktype, datatype, value_type, value, value_entity, value_json) VALUES
   (701, 0, 'P1810', 0, 'value', 'string', 'string', NULL, NULL, '"q\u0000"');
+
+INSERT INTO sitelink (entity_id, dump_id, site, title, badges) VALUES
+  ('Q42', 1, 'enwiki', 'Douglas Adams', '{Q17437796}'), ('Q42', 1, 'kowiki', '더글러스 애덤스', '{}'),
+  ('Q42', 1, 'commonswiki', 'Category:Douglas Adams', '{}'), ('Q42', 1, 'be_x_oldwiki', 'Дуглас Адамс', '{}'),
+  ('Q42', 1, 'enwikiquote', 'What?/A & B''s 100%', '{Q17437796,P1}'), ('Q42', 1, 'xxsite', 'x', '{}'),
+  ('Q42', 1, 'zh_min_nanwiki', 'Douglas Adams', '{}'), ('Q42', 2, 'enwiki', 'other dump', '{}');
+INSERT INTO sitelink (entity_id, dump_id, site, title, title_json) VALUES
+  ('Q7', 1, 'enwiki', 'ab', '"a\u0000b"');

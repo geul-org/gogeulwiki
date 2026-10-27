@@ -19,7 +19,7 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
 
 ### 이전 판본 (20250908, 삭제)
 
-지금 공표된 문서(2026-10-26 생성)의 원본이다. 이 DB(`geuldev.public`)는 2026-10-26 삭제했다(적재 입력이 소실되어 다시 만들 수 없다). 다음 생성부터는 아래 새 덤프를 쓴다.
+2026-10-26에 처음 공표한 Q1~Q1000 문서의 원본이었다(지금 공표본은 2026-10-27 새 판으로 다시 만들었다). 이 DB(`geuldev.public`)는 2026-10-26 삭제했다(적재 입력이 소실되어 다시 만들 수 없다). 다음 생성부터는 아래 새 덤프를 쓴다.
 
 | 항목 | 값 |
 |---|---|
@@ -59,9 +59,10 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
 |---|---|
 | `dump` | `url`, `sha256`, `downloaded_at`, `loader`, `loader_commit` (출처 기록) |
 | `entity` | `entity_id` (있는지) |
-| `label`, `description`, `alias` | `language`, `value` (별칭은 `ordinal` 순) |
-| `statement` | `statement_id`(덤프 순), `property`, `rank`, `value_type`, `value`(jsonb), `value_entity` |
+| `label`, `description`, `alias` | `language`, `value` (모든 언어, 언어 코드 바이트 순. 별칭은 그 안에서 `ordinal` 순) |
+| `statement` | `statement_id`(wikipg가 속성 ID 문자열 순으로 매긴다. 속성 안에서는 덤프 순), `property`, `rank`, `value_type`, `value`(jsonb), `value_entity` |
 | `qualifier` | `statement_id`, `ordinal`(qualifiers-order), `property`, `value_type`, `value`, `value_entity` |
+| `sitelink` | `site`, `title`(`title_json`), `badges` (사이트 ID 바이트 순 = 덤프 키 순) |
 
 - 모든 질의는 `dump_id`로 한 판만 읽는다(`-dump-id`).
 - 값은 개체면 맨 ID(`value_entity`), 문자열이면 따옴표 없는 문자열, 그 밖은 datavalue JSON(jsonb의 공백·키 순서)이다. `\u0000`이 든 값은 wikipg가 `value_json`(레이블·별칭·설명도 `value_json`)에 원문 JSON으로 두므로 그것을 읽는다(`exactValue`). novalue·somevalue는 빈 값이라 건너뛴다(보고서 `값 없음`).
@@ -85,9 +86,9 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
   - Q·P를 가리키는 Reference(WIKIDATA-QID·PID)는 문서 위치와 상관없다. 바뀐 것은 문서가 놓이는 주소뿐이다.
 - **문서 단위:** QID 하나당 `.geul` 문서 하나.
 - **대상:** Q1 ~ Q1000(0908 판으로 생성), 다음은 새 판으로 Q1 ~ Q10000. PID는 그 문서들이 쓴 만큼 옮긴다.
-- **레코드:** LABEL, DESCRIPTION, ALIAS, (속성이면) 데이터 타입, TRIPLE과 그 QUALIFIER를 작성한다(이 순서).
+- **레코드:** LABEL, DESCRIPTION, ALIAS, (속성이면) 데이터 타입, TRIPLE과 그 QUALIFIER, sitelink를 작성한다(이 순서).
 - **값:** 항목(QID), 문자열, 외부 ID, URL·커먼즈(URI), 날짜, monolingualtext, 좌표, 수량(아래 값 변환 표). 처음 범위는 날짜까지였고 2026-10-26에 monolingualtext·좌표·URI·수량을 더했다. 그 밖의 값(Lexeme 등)은 변환하지 않았다고 기록한다.
-- **언어:** ko, en.
+- **언어:** 덤프에 있는 모든 언어(`mul` 포함). 문서는 QID·PID 하나에 하나이고 언어를 고르지 않는다(2026-10-27 결정, `-langs` 삭제). 언어별 보기는 나중에 따로 만든다. 그 전에는 ko·en(2026-10-26), ko·en·mul(2026-10-27 오전)로 만들었다.
 - **명세:** 아직 없는 명세는 설계하면서 제안하고 검토를 받는다(ALIAS, DESCRIPTION, TRIPLE, QUALIFIER는 docs/edge에 반영).
 
 ## 출처 기록 (초기 최소 세트, files/geul/legacy.md)
@@ -96,6 +97,7 @@ testdata/          DB 테스트 고정 자료(fixture.sql)
 
 - 출처: SOURCE 둘. 덤프 URI + 덤프 파일 SHA-256(`dump.sha256`, SHA-256-DIGEST), 그 항목의 QID + 없음 표지 `0x0000`(항목 단위 다이제스트는 없다, docs/edge/CODEC 선택 필드). 덤프 SHA-256을 모르면 없음 표지
 - 받은 시각: `dump.downloaded_at`
+- 실행 옵션은 문서에 적지 않는다. 언어 선택(`-langs`)을 없앤 뒤로 문서 내용을 바꾸는 옵션이 없다(`-schema`·`-dump-id`는 로컬 DB 이름이고 덤프는 SOURCE가 고정한다). 범위·DB·커밋은 실행 보고서 첫 줄에 남긴다.
 - 변환 도구: TRANSFORMED-BY 둘(docs/meta/lineage/TRANSFORMED-BY). 도구 Reference는 geul.org 용어 정의 문서(ISSUER 용어 정의, 도구 하나에 문서 하나), 버전은 전체 커밋 ID(SHA1-DIGEST)다.
   - 적재 도구는 적지 않는다(2026-10-27 결정). wikipg는 덤프를 무손실로 저장하므로(덤프 줄 원문 `entity_raw`, 구조화 표가 못 담는 값은 `*_json` 열) 문서는 덤프·wikigeul·라이브러리로 정해진다. 적재 도구 커밋은 DB `dump.loader_commit`에 남는다. wikipg(옛 이름 wikiload 포함)가 아닌 적재 도구로 채운 dump는 무손실을 알 수 없어 거부한다
   - (이전 0908 판의 적재 도구 geul-entity `0x0001000000000003` `4225b3b4297796a79e95c4cda5aa54df3acc4069`)
@@ -114,10 +116,9 @@ go run ./cmd/wikigeul -root ../geul-org/artifacts/geul -from 1 -to 1000 -commit 
 |---|---|---|
 | `-root` | `.well-known/geul`을 담은 아카이브 루트(geul-dev `draft/geul-org/artifacts/geul`) | `.` |
 | `-from`, `-to` | QID 범위 | 1, 1000 |
-| `-langs` | 레이블·설명·별칭 언어 | `ko,en` |
 | `-commit` | TRANSFORMED-BY에 남길 변환 도구 커밋, 전체 ID (필수) | |
 | `-lib-commit` | TRANSFORMED-BY에 남길 GEUL 라이브러리 커밋, 전체 ID (필수) | |
-| `-report` | 개체별 건수·건너뛴 사유·원문 보존 날짜의 사유 TSV (열: id, labels, descriptions, aliases, triples, qualifiers, skipped, raw. qualifier 사유는 `qualifier ` 접두) | 없음 |
+| `-report` | 개체별 건수·건너뛴 사유·원문 보존 날짜의 사유 TSV (첫 줄은 `# wikigeul -from … -to … -schema … -dump-id … -commit … -lib-commit …` 실행 기록, 다음 줄이 머리글. 열: id, labels, descriptions, aliases, triples, qualifiers, sitelinks, badges, skipped, raw. qualifier 사유는 `qualifier ` 접두) | 없음 |
 | `-dsn` | PostgreSQL DSN | 비우면 PG* 환경변수 |
 | `-schema` | 적재된 덤프의 스키마(wikipg `-schema`) | `wikidata` |
 | `-dump-id` | 읽을 판(wikipg `-dump-id`) | 1 |
@@ -171,9 +172,47 @@ go run ./cmd/wikigeul -root ../geul-org/artifacts/geul -from 1 -to 1000 -commit 
   ```
   어휘는 위키데이터 RDF의 Wikibase 온톨로지 이름 그대로다(18종, files/geul/wikidata-datatype-mapping.md). 모르는 데이터 타입은 쓰지 않고 보고서 `skipped`에 남긴다. 문서당 약 50 WORD.
 - Edge Id(LOCAL ID)는 버전을 넘어 유지한다(docs OVERVIEW 개정). 다시 생성할 때 직전 공표본과 그 버전 목록의 `NEXT-LOCAL-ID`를 읽어(`resolve.Dir.Current`), 내용이 같은 서술은 같은 번호를, 바뀌거나 새로 생긴 서술은 다음 번호를 받는다(geul `delta.LocalIDs`). 사라진 번호는 다시 쓰지 않는다. 내용이 바뀐 클레임은 "삭제 + 신규"가 된다(개정 표지가 없다).
-- 클레임은 TRIPLE(Edge Id, Predicate, Subject, Object, Rank)이고, 그 qualifier는 바로 뒤에 QUALIFIER(Edge Id, Property, 대상 TRIPLE의 Edge Id, Value)로 잇는다. qualifier 값은 본 값과 같은 규칙으로 바꾼다(날짜 원문 보존 포함). 출처(references)는 새 DB에 적재돼 있지만 아직 옮기지 않는다.
+- 클레임은 TRIPLE(Edge Id, Predicate, Subject, Object, Rank)이고, 그 qualifier는 바로 뒤에 QUALIFIER(Edge Id, Property, 대상 TRIPLE의 Edge Id, Value)로 잇는다. qualifier 값은 본 값과 같은 규칙으로 바꾼다(날짜 원문 보존 포함). 출처(references)는 새 DB에 적재돼 있지만 옮기지 않는다(아래 "출처(references)").
 - qualifier 순서는 `qualifier.ordinal`(위키데이터 `qualifiers-order`, 원본 그대로)이다. 0908 판 DB는 속성 사이 순서를 잃었었다(위 빈칸).
 - TRANSFORMED-BY는 도구 Reference(EXTERNAL-ISSUER-1WORD, geul.org 용어 정의 문서의 LOCAL 2) + 커밋 SHA1-DIGEST다(2026-10-26). 커밋은 커밋된 소스여야 한다: 작업 트리에 커밋되지 않은 변경이 있으면 그 커밋 ID를 쓰지 말고 먼저 커밋한다(도구는 아직 검사하지 않는다).
+
+## Sitelink (2026-10-27)
+
+위키데이터 RDF가 sitelink를 쓰는 모양(문서 페이지가 주어, `schema:about` 개체, `wikibase:badge` 배지) 그대로 옮긴다. 쓰는 Edge는 문법에 정의된 REFERENCE-NODE와 TRIPLE뿐이다. 술어 URI를 LOCAL에 묶는 방식은 속성 문서의 데이터 타입과 같다.
+
+```
+REFERENCE-NODE( #a → URI http://schema.org/about )              문서마다 한 번, 첫 페이지 앞
+REFERENCE-NODE( #p → URI https://en.wikipedia.org/wiki/Douglas_Adams )
+TRIPLE( #a, #p, Q42, normal )                                    페이지 #p는 Q42에 관한 것이다
+REFERENCE-NODE( #b → URI http://wikiba.se/ontology#badge )       배지가 처음 나올 때 한 번
+TRIPLE( #b, #p, Q17437796, normal )                              #p의 배지(알찬 글)
+```
+
+- REFERENCE-NODE(Q42 → 페이지 URI)로 쓰지 않는다. REFERENCE-NODE는 Subject가 Object를 지시한다는 바인딩이라, Q42(사람)가 위키백과 문서를 지시한다는 뜻이 되고 한 Reference가 사이트 수만큼 다른 Object에 묶인다. 페이지 LOCAL을 URI에 묶는 것은 REFERENCE-NODE의 대표 용례(LOCAL → URI)다.
+- 순서: 사이트 ID 바이트 순(덤프 JSON의 키 순), 배지는 덤프 순. 사이트 ID·언어·이름(위키데이터 RDF의 `schema:isPartOf`·`inLanguage`·`name`)은 URL에서 되살릴 수 있어 따로 적지 않는다.
+- URL: `https://` + 호스트 + `/wiki/` + 제목. 제목은 공백을 `_`로 바꾸고 MediaWiki `wfUrlencode`처럼 인코딩한다(영숫자와 `-._;@$!*(),/~:`는 그대로, 나머지 바이트는 대문자 `%XX`).
+- 호스트: 사이트 ID = 언어 부분 + 프로젝트 접미사. 접미사 `wiki`→`wikipedia.org`, `wiktionary`·`wikibooks`·`wikinews`·`wikiquote`·`wikisource`·`wikiversity`·`wikivoyage`→같은 이름 `.org`, 언어 부분의 `_`는 `-`(`zh_min_nanwiki` → `zh-min-nan.wikipedia.org`). DB에는 사이트 메타데이터가 없어서, 20261019 덤프 sitelink의 사이트 960개를 Wikimedia SiteMatrix(`meta.wikimedia.org` `action=sitematrix`, 2026-10-27)와 대조했다. 규칙과 다른 11개는 표로 둔다:
+
+  | 사이트 ID | 호스트 |
+  |---|---|
+  | `be_x_oldwiki` | `be-tarask.wikipedia.org` |
+  | `commonswiki` | `commons.wikimedia.org` |
+  | `foundationwiki` | `foundation.wikimedia.org` |
+  | `mediawikiwiki` | `www.mediawiki.org` |
+  | `metawiki` | `meta.wikimedia.org` |
+  | `outreachwiki` | `outreach.wikimedia.org` |
+  | `sourceswiki` | `wikisource.org` |
+  | `specieswiki` | `species.wikimedia.org` |
+  | `wikidatawiki` | `www.wikidata.org` |
+  | `wikifunctionswiki` | `www.wikifunctions.org` |
+  | `wikimaniawiki` | `wikimania.wikimedia.org` |
+
+- 규칙에도 표에도 맞지 않는 사이트는 건너뛰고 보고서 `skipped`에 `sitelink 사이트: <ID>`로 센다. 항목 ID가 아닌 배지는 `sitelink badge: <값>`.
+- 보고서 열 `sitelinks`(쓴 페이지), `badges`(쓴 배지).
+
+## 출처(references) — 보류
+
+statement의 출처는 옮기지 않는다(2026-10-27 확인). 문법은 레코드 단위 출처를 근거 Edge `RECORD-SOURCE`(`0x21`)로 쓰라고 하지만(문법 document·edge "근거 Edge") 그 레이아웃이 없다. 문법 페이지(`edge/` 아래 RECORD-SOURCE 페이지)도, geul.org 규격 문서(`0x0000/0x0000000000001021`)도 없고, TRIPLE 페이지 "열린 문제"에 "RECORD-SOURCE로 TRIPLE의 Edge Id를 가리키고, 출처 묶음은 LOCAL 노드로 한 번 정의하고 그 항목은 TRIPLE로 쓴다"는 안만 있다. 문법이 정하기 전에는 지어내지 않는다. 그래서 출처만 다른 위키데이터 중복 statement(예: Q2610 P166 Q694401 ×4)는 GEUL에서 Edge Id로만 구별된다.
 
 ## 개발 규칙
 

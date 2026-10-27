@@ -13,7 +13,8 @@ import (
 // BuildDoc writes the document of entity e under issuer (README): the
 // HEAD provenance (headRecords), then LABEL per label, DESCRIPTION per
 // description, ALIAS per alias, a property's datatype (datatypeEdges) and a
-// TRIPLE followed by its QUALIFIERs per convertible claim. Edge Ids come from a:
+// TRIPLE followed by its QUALIFIERs per convertible claim, then the sitelinks
+// (sitelinkEdges). Edge Ids come from a:
 // a statement equal to one of the previous version keeps its ID, new ones
 // take the next (OVERVIEW 개정, delta.LocalIDs). The document ID is the
 // DocNumber of e's ID (its letter and number). The report counts what was written and skipped.
@@ -38,6 +39,7 @@ func BuildDoc(e source.Entity, issuer []core.Word, p Provenance, a IDs) ([]byte,
 	body := append(append(labels, descriptions...), aliases...)
 	body = append(body, datatypeEdges(a, subject, e.Datatype, &rep)...)
 	body = append(body, tripleEdges(a, subject, e.Claims, &rep)...)
+	body = append(body, sitelinkEdges(a, subject, e.Sitelinks, &rep)...)
 	rep.Labels, rep.Descriptions, rep.Aliases = len(labels), len(descriptions), len(aliases)
 	return document(head, body), rep, nil
 }

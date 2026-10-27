@@ -3,7 +3,8 @@
 package port
 
 // Report tells what one ported document holds and what it left out: counts
-// of LABEL, DESCRIPTION, ALIAS, TRIPLE and QUALIFIER records, skipped claims and
+// of LABEL, DESCRIPTION, ALIAS, TRIPLE and QUALIFIER records, sitelink pages
+// and their badges, skipped claims and
 // qualifiers by reason (unsupported value type, novalue/somevalue …), dates
 // kept as original text by conversion reason (Raw) and the properties the
 // document uses as predicates, qualifier properties or values, for porting
@@ -15,6 +16,8 @@ type Report struct {
 	Aliases      int
 	Triples      int
 	Qualifiers   int
+	Sitelinks    int
+	Badges       int
 	Skipped      map[string]int
 	Raw          map[string]int
 	Properties   []string

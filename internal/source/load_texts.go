@@ -5,10 +5,10 @@ package source
 import "database/sql"
 
 // loadTexts runs query (which selects language, text and value_json for $1 =
-// id among $2 = langs) and returns the rows in order, each text exact
+// id) and returns the rows in order, each text exact
 // (exactValue).
-func loadTexts(db *sql.DB, query, id string, langs any) ([]Text, error) {
-	rows, err := db.Query(query, id, langs)
+func loadTexts(db *sql.DB, query, id string) ([]Text, error) {
+	rows, err := db.Query(query, id)
 	if err != nil {
 		return nil, err
 	}

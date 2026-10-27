@@ -18,7 +18,7 @@ import (
 // earlier one (resolve.Dir.Overwrite: development, no version per run). It is
 // false when the entity is not in the dump.
 func portOne(db *sql.DB, dir resolve.Dir, id string, issuer []core.Word, c config, prov port.Provenance) (port.Report, bool, error) {
-	e, ok, err := source.LoadEntity(db, source.Store{Schema: c.Schema, Dump: c.Dump}, id, c.Langs)
+	e, ok, err := source.LoadEntity(db, source.Store{Schema: c.Schema, Dump: c.Dump}, id)
 	if err != nil || !ok {
 		return port.Report{ID: id}, false, err
 	}

@@ -1,10 +1,10 @@
 //ff:type feature=cli type=model
-//ff:what config — the wikigeul run settings: tree root, QID range, languages, DB DSN, loaded dump, porter and library commits, report path
+//ff:what config — the wikigeul run settings: tree root, QID range, DB DSN, loaded dump, porter and library commits, report path
 package main
 
 // config is one wikigeul run: the archive root (geul-dev draft/geul-org/artifacts/geul) whose .well-known/geul receives
-// the documents, the QID range [From, To], the label/description/alias
-// languages, the PostgreSQL DSN (empty: lib/pq reads the PG* environment
+// the documents, the QID range [From, To] (every language is written: one
+// document per entity holds them all), the PostgreSQL DSN (empty: lib/pq reads the PG* environment
 // variables), the loaded dump to read (schema and dump_id, sql/wikidata.sql),
 // the porter and GEUL library commits recorded in TRANSFORMED-BY and where
 // the report goes.
@@ -12,7 +12,6 @@ type config struct {
 	Root      string
 	From      uint64
 	To        uint64
-	Langs     []string
 	DSN       string
 	Schema    string
 	Dump      int16

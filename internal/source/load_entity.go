@@ -8,11 +8,11 @@ import (
 )
 
 // LoadEntity reads the entity id from the dump s (queriesFor): its labels,
-// descriptions and aliases in langs and all its claims. It is false, with no
+// descriptions and aliases in every language, all its claims and its sitelinks. It is false, with no
 // error, when the dump has no such ID. An invalid schema name is an error.
-func LoadEntity(db *sql.DB, s Store, id string, langs []string) (Entity, bool, error) {
+func LoadEntity(db *sql.DB, s Store, id string) (Entity, bool, error) {
 	if !validSchema(s.Schema) {
 		return Entity{}, false, fmt.Errorf("wikigeul: schema %q is not a plain identifier", s.Schema)
 	}
-	return loadEntityWith(db, queriesFor(s), id, langs)
+	return loadEntityWith(db, queriesFor(s), id)
 }

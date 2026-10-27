@@ -1,5 +1,5 @@
 //ff:func feature=cli type=helper control=iteration dimension=1
-//ff:what writeReport — the run report as TSV, one line per entity after a header
+//ff:what writeReport — the run report as TSV: a # line naming the run, a header, one line per entity
 package main
 
 import (
@@ -9,9 +9,10 @@ import (
 	"github.com/geul-org/gogeulwiki/internal/port"
 )
 
-// writeReport writes reps to path as TSV (reportLine) after a header line.
-func writeReport(path string, reps []port.Report) error {
-	lines := []string{"id\tlabels\tdescriptions\taliases\ttriples\tqualifiers\tskipped\traw"}
+// writeReport writes reps to path as TSV (reportLine) after the comment line
+// head (runLine) and a header line.
+func writeReport(path, head string, reps []port.Report) error {
+	lines := []string{head, "id\tlabels\tdescriptions\taliases\ttriples\tqualifiers\tsitelinks\tbadges\tskipped\traw"}
 	for _, r := range reps {
 		lines = append(lines, reportLine(r))
 	}

@@ -19,6 +19,8 @@ const (
 
 	refExternalIssuer1Word uint8 = 0x0C // Reference CCCC EXTERNAL-ISSUER-1WORD (reference/EXTERNAL-ISSUER)
 
+	schemaOrg = "http://schema.org/" // schema.org namespace as Wikidata's RDF writes it (sitelink schema:about)
+
 	gregorian = "http://www.wikidata.org/entity/Q1985727" // Wikidata calendar model: proleptic Gregorian
 	julian    = "http://www.wikidata.org/entity/Q1985786" // Wikidata calendar model: proleptic Julian
 )

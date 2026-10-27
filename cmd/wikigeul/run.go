@@ -51,5 +51,5 @@ func run(args []string) error {
 	if c.Report == "" {
 		return nil
 	}
-	return writeReport(c.Report, append(qReps, pReps...))
+	return writeReport(c.Report, runLine(c), append(qReps, pReps...))
 }

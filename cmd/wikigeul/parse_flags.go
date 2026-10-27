@@ -6,7 +6,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"strings"
 
 	"github.com/geul-org/gogeulwiki/internal/port"
 )
@@ -18,12 +17,10 @@ import (
 func parseFlags(args []string) (config, error) {
 	fs := flag.NewFlagSet("wikigeul", flag.ContinueOnError)
 	var c config
-	var langs string
 	var dump int
 	fs.StringVar(&c.Root, "root", ".", "archive root holding .well-known/geul (geul-dev draft/)")
 	fs.Uint64Var(&c.From, "from", 1, "first QID number")
 	fs.Uint64Var(&c.To, "to", 1000, "last QID number")
-	fs.StringVar(&langs, "langs", "ko,en", "label, description and alias languages")
 	fs.StringVar(&c.DSN, "dsn", "", "PostgreSQL DSN (empty: PG* environment variables)")
 	fs.StringVar(&c.Schema, "schema", "wikidata", "schema of the loaded dump (wikipg -schema)")
 	fs.IntVar(&dump, "dump-id", 1, "dump_id of the loaded dump (1..255)")
@@ -45,6 +42,5 @@ func parseFlags(args []string) (config, error) {
 	if c.From == 0 || c.From > c.To {
 		return config{}, errors.New("wikigeul: need 1 <= -from <= -to")
 	}
-	c.Langs = strings.Split(strings.ReplaceAll(langs, " ", ""), ",")
 	return c, nil
 }

@@ -18,7 +18,7 @@ func TestCarriedIDs(t *testing.T) {
 		t.Fatalf("unpublished: %v", err)
 	}
 	db, schema := fixtureDB(t)
-	c := config{Langs: []string{"en"}, Commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", LibCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Schema: schema, Dump: 1}
+	c := config{Commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", LibCommit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Schema: schema, Dump: 1}
 	prov, _ := provenanceOf(fixtureDump(), c.Commit, c.LibCommit)
 	if _, ok, err := portOne(db, dir, "Q42", issuer, c, prov); err != nil || !ok {
 		t.Fatalf("port: %v", err)
