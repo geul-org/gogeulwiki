@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=sequence
-//ff:what TestBuildDocCarriesIDs — rebuilding with one claim changed keeps every other Edge Id and gives the changed claim the next ID, never reusing the old one
+//ff:what TestBuildDocCarriesIDs — rebuilding with one claim changed keeps every other Edge Id (HEAD SOURCE and its origin too) and gives the changed claim the next ID, never reusing the old one
 package port
 
 import (
@@ -29,10 +29,10 @@ func TestBuildDocCarriesIDs(t *testing.T) {
 	}
 	d1, _ := inspect.Decode(v1)
 	d2, _ := inspect.Decode(v2)
-	if d1.Body[0].ID != d2.Body[0].ID || d1.Body[1].ID != d2.Body[1].ID || d2.Body[2].ID != 4 || d1.Body[2].ID != 3 {
-		t.Fatalf("v1 %d %d %d, v2 %d %d %d", d1.Body[0].ID, d1.Body[1].ID, d1.Body[2].ID, d2.Body[0].ID, d2.Body[1].ID, d2.Body[2].ID)
+	if d1.Head[5].ID == 0 || d1.Head[5].ID != d2.Head[5].ID || d1.Body[0].ID != d2.Body[0].ID || d1.Body[1].ID != d2.Body[1].ID || d1.Body[2].ID != d2.Body[2].ID || d2.Body[3].ID != 8 || d1.Body[3].ID != 7 {
+		t.Fatalf("v1 %d %d %d %d, v2 %d %d %d %d", d1.Head[5].ID, d1.Body[1].ID, d1.Body[2].ID, d1.Body[3].ID, d2.Head[5].ID, d2.Body[1].ID, d2.Body[2].ID, d2.Body[3].ID)
 	}
-	if gone := ids.Unused(); len(gone) != 1 || gone[0] != 3 {
+	if gone := ids.Unused(); len(gone) != 1 || gone[0] != 7 {
 		t.Fatalf("removed %v", gone)
 	}
 }

@@ -9,9 +9,11 @@ INSERT INTO dump (dump_id, dump_date, file_name, url, size_bytes, sha256, downlo
    'github.com/geul-org/wikipg/cmd/wikipg', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
   (2, '2026-10-19', 'other.json.bz2', 'https://example.org/other', 1, '00', '2026-10-26 06:34:43+00', 'elsewhere/loader', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
 
+INSERT INTO entity (entity_id, line_no, kind, num, type, datatype, lastrevid, modified, dump_id) VALUES
+  ('Q42', 5, 'Q', 42, 'item', NULL, 2557857485, '2026-10-17 04:21:25+00', 1);
 INSERT INTO entity (entity_id, line_no, kind, num, type, datatype, dump_id) VALUES
   ('Q1', 2, 'Q', 1, 'item', NULL, 1), ('Q2', 3, 'Q', 2, 'item', NULL, 1), ('Q3', 4, 'Q', 3, 'item', NULL, 1),
-  ('Q42', 5, 'Q', 42, 'item', NULL, 1), ('P31', 6, 'P', 31, 'property', 'wikibase-item', 1),
+  ('P31', 6, 'P', 31, 'property', 'wikibase-item', 1),
   ('P580', 7, 'P', 580, 'property', 'time', 1), ('Q99', 8, 'Q', 99, 'item', NULL, 2), ('Q7', 9, 'Q', 7, 'item', NULL, 1),
   ('Q30', 10, 'Q', 30, 'item', NULL, 1);
 
@@ -63,3 +65,14 @@ INSERT INTO sitelink (entity_id, dump_id, site, title, badges) VALUES
   ('Q42', 1, 'zh_min_nanwiki', 'Douglas Adams', '{}'), ('Q42', 2, 'enwiki', 'other dump', '{}');
 INSERT INTO sitelink (entity_id, dump_id, site, title, title_json) VALUES
   ('Q7', 1, 'enwiki', 'ab', '"a\u0000b"');
+
+-- Q42 P31 (4201) has two references: Britannica (P248 + its ID P1417) and a URL with its retrieval date.
+-- Hash h3 exists only in dump 2 (must not be read with dump 1).
+INSERT INTO reference (hash, dump_id) VALUES ('h1', 1), ('h2', 1), ('h3', 2);
+INSERT INTO statement_reference (statement_id, ordinal, hash) VALUES (4201, 1, 'h2'), (4201, 0, 'h1'), (4202, 0, 'h3');
+INSERT INTO reference_snak (hash, dump_id, ordinal, property, value_ordinal, snaktype, datatype, value_type, value, value_entity) VALUES
+  ('h1', 1, 1, 'P1417', 0, 'value', 'external-id', 'string', '"biography/Douglas-Adams"', NULL),
+  ('h1', 1, 0, 'P248', 0, 'value', 'wikibase-item', 'wikibase-entityid', '{"id": "Q5375741", "numeric-id": 5375741, "entity-type": "item"}', 'Q5375741'),
+  ('h2', 1, 0, 'P854', 0, 'value', 'url', 'string', '"http://www.eskimo.com/~rkj/weekly/aa051701a.htm"', NULL),
+  ('h2', 1, 1, 'P813', 0, 'somevalue', 'time', NULL, NULL, NULL),
+  ('h3', 2, 0, 'P143', 0, 'value', 'wikibase-item', 'wikibase-entityid', '{"id": "Q328", "numeric-id": 328, "entity-type": "item"}', 'Q328');

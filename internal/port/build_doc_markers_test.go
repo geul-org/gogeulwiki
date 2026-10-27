@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=iteration dimension=1
-//ff:what TestBuildDocMarkers — Q30-shaped claims: a border with P582 somevalue, a novalue central bank with time qualifiers beside a preferred value, novalue and somevalue told apart by a qualifier; hex as the grammar shows, schema clean, counted
+//ff:what TestBuildDocMarkers — Q30-shaped claims: a border with P582 somevalue, a novalue central bank with time qualifiers beside a preferred value, novalue and somevalue told apart by a qualifier; hex as the grammar shows (after the dump's REFERENCE-NODE and the HEAD SOURCE IDs), schema clean, counted
 package port
 
 import (
@@ -38,19 +38,19 @@ func TestBuildDocMarkers(t *testing.T) {
 	}
 	d, _ := inspect.Decode(b)
 	want := [][]core.Word{
-		{0x148A, 0x0088, 1, 0x00A8, 47, 0x00A0, 30, 0x00A0, 34266, 0},
-		{0x138B, 0x0088, 2, 0x00A8, 582, 0x0088, 1, core.UnknownValue},
-		{0x148A, 0x0088, 3, 0x00A8, 1304, 0x00A0, 30, 0x00A0, 53536, 1},
-		{0x140A, 0x0088, 4, 0x00A8, 1304, 0x00A0, 30, core.NoValue, 0},
-		{0x148B, 0x0088, 5, 0x00A8, 580, 0x0088, 4, 0x0924, 0x3138, 0x3131},
-		{0x148B, 0x0088, 6, 0x00A8, 582, 0x0088, 4, 0x0924, 0x3138, 0x3136},
+		{0x148A, 0x0088, 5, 0x00A8, 47, 0x00A0, 30, 0x00A0, 34266, 0},
+		{0x138B, 0x0088, 6, 0x00A8, 582, 0x0088, 5, core.UnknownValue},
+		{0x148A, 0x0088, 7, 0x00A8, 1304, 0x00A0, 30, 0x00A0, 53536, 1},
+		{0x140A, 0x0088, 8, 0x00A8, 1304, 0x00A0, 30, core.NoValue, 0},
+		{0x148B, 0x0088, 9, 0x00A8, 580, 0x0088, 8, 0x0924, 0x3138, 0x3131},
+		{0x148B, 0x0088, 10, 0x00A8, 582, 0x0088, 8, 0x0924, 0x3138, 0x3136},
 	}
-	if len(d.Body) < len(want) {
+	if len(d.Body) < len(want)+1 || d.Body[0].Record.Codec != edgeReferenceNode {
 		t.Fatalf("body %d", len(d.Body))
 	}
 	for i, w := range want {
-		if !slices.Equal(d.Body[i].Words, w) {
-			t.Fatalf("record %d: %04X want %04X", i, d.Body[i].Words, w)
+		if !slices.Equal(d.Body[i+1].Words, w) {
+			t.Fatalf("record %d: %04X want %04X", i, d.Body[i+1].Words, w)
 		}
 	}
 }

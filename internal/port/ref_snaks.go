@@ -1,0 +1,33 @@
+//ff:func feature=port type=encoder control=iteration dimension=1
+//ff:what refSnaks — the convertible snaks of a reference, in snaks-order; the others counted by reason with the prefix "reference "
+package port
+
+import "github.com/geul-org/gogeulwiki/internal/source"
+
+// refSnaks converts each snak of r like a qualifier (qualifierClaim,
+// claimObject; somevalue/novalue become slot markers). A snak whose property
+// or value does not convert is left out and counted in rep.Skipped, dates
+// kept as original text in rep.Raw and markers in rep.Markers, all prefixed
+// "reference "; the properties used are added to rep.Properties.
+func refSnaks(r source.Reference, rep *Report) []refSnak {
+	var out []refSnak
+	for _, q := range r.Snaks {
+		c := qualifierClaim(q)
+		prop, okProp := entityRef(q.Property)
+		value, reason, raw := claimObject(c)
+		if !okProp {
+			reason = "속성 ID: " + q.Property
+		}
+		if reason != "" {
+			rep.Skipped["reference "+reason]++
+			continue
+		}
+		if raw != "" {
+			rep.Raw["reference "+raw]++
+		}
+		rep.Properties = append(rep.Properties, propertiesOf(c)...)
+		countMarker(rep, "reference ", value)
+		out = append(out, refSnak{Property: q.Property, Prop: prop, Value: value})
+	}
+	return out
+}

@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=iteration dimension=1
-//ff:what tripleEdges — a TRIPLE and then its QUALIFIERs per convertible claim, Edge Ids from next; skipped claims counted by reason
+//ff:what tripleEdges — a TRIPLE and then its QUALIFIERs and SOURCEs per convertible claim, Edge Ids from next; skipped claims counted by reason
 package port
 
 import (
@@ -9,13 +9,14 @@ import (
 )
 
 // tripleEdges builds a TRIPLE on subject for each claim whose predicate,
-// value and rank convert, each followed by its QUALIFIERs (qualifierEdges),
+// value and rank convert, each followed by its QUALIFIERs (qualifierEdges)
+// and its references (sourceEdges with the document's state st),
 // numbering Edge Ids from *next. Every other claim is
 // counted in rep.Skipped by reason, a date kept as original text in rep.Raw
 // by its conversion reason (claimObject), a somevalue or novalue object written
 // as its slot marker counted in rep.Markers, and every property used as a
 // predicate or a value is added to rep.Properties.
-func tripleEdges(a IDs, subject core.Record, claims []source.Claim, rep *Report) []core.Record {
+func tripleEdges(a IDs, subject core.Record, claims []source.Claim, st *sourcing, rep *Report) []core.Record {
 	var out []core.Record
 	for _, c := range claims {
 		pred, okPred := entityRef(c.Property)
@@ -40,6 +41,7 @@ func tripleEdges(a IDs, subject core.Record, claims []source.Claim, rep *Report)
 		out = append(out, r)
 		rep.Triples++
 		out = append(out, qualifierEdges(a, id, c.Qualifiers, rep)...)
+		out = append(out, sourceEdges(a, id, c.References, st, rep)...)
 	}
 	return out
 }

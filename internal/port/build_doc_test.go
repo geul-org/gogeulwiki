@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=sequence
-//ff:what TestBuildDoc — a full document with LABEL, DESCRIPTION, ALIAS, a TRIPLE and its QUALIFIER, then a sitelink with its badge, passes schema with its DOC-ID (Q in the top byte) and counts; a property states its datatype; a bad ID and a bad Issuer fail
+//ff:what TestBuildDoc — a full document with the dump SOURCE and its QUALIFIER in the HEAD, the dump's REFERENCE-NODE, LABEL, DESCRIPTION, ALIAS, a TRIPLE and its QUALIFIER, then a sitelink with its badge, passes schema with its DOC-ID (Q in the top byte) and counts; a property states its datatype; a bad ID and a bad Issuer fail
 package port
 
 import (
@@ -32,21 +32,21 @@ func TestBuildDoc(t *testing.T) {
 		t.Fatalf("schema: %+v", fs)
 	}
 	ws, _ := core.ReadWords(b)
-	if parts, err := core.SplitDocument(ws); err != nil || len(parts.Head) < 2 {
+	if parts, err := core.SplitDocument(ws); err != nil || len(parts.Head) != 7 || parts.Head[5].Codec != edgeSource || parts.Head[6].Codec != edgeQualifier {
 		t.Fatalf("split: %v", err)
 	} else if _, doc, err := core.DecodeDocID(parts.Head[1]); err != nil || doc[0] != 0x5100 || doc[3] != 42 {
 		t.Fatalf("DOC-ID: %04X %v", doc, err)
 	}
 	d, _ := inspect.Decode(b)
-	if len(d.Body) != 10 || d.Body[1].Record.Codec != edgeDescription || d.Body[2].Record.Codec != edgeAlias || d.Body[3].ID != 4 || d.Body[4].ID != 5 ||
-		d.Body[5].Record.Codec != edgeReferenceNode || d.Body[7].Record.Codec != edgeTriple || d.Body[9].Record.Codec != edgeTriple {
+	if len(d.Body) != 11 || d.Body[0].Record.Codec != edgeReferenceNode || d.Body[2].Record.Codec != edgeDescription || d.Body[3].Record.Codec != edgeAlias || d.Body[4].ID != 8 || d.Body[5].ID != 9 ||
+		d.Body[6].Record.Codec != edgeReferenceNode || d.Body[8].Record.Codec != edgeTriple || d.Body[10].Record.Codec != edgeTriple {
 		t.Fatalf("body %+v", d.Body)
 	}
 	pb, prep, err := BuildDoc(source.Entity{ID: "P214", Datatype: "external-id"}, []core.Word{1, 0}, prov(), freshIDs(1))
 	if fs := schema.Check(pb, schema.Options{}).Facts; err != nil || len(fs) != 0 || len(prep.Skipped) != 0 {
 		t.Fatalf("property: %v %+v", err, fs)
 	}
-	if pd, _ := inspect.Decode(pb); len(pd.Body) != 2 || pd.Body[1].Record.Codec != edgeTriple {
+	if pd, _ := inspect.Decode(pb); len(pd.Body) != 3 || pd.Body[2].Record.Codec != edgeTriple {
 		t.Fatalf("property body %+v", pd.Body)
 	}
 	if _, _, err := BuildDoc(source.Entity{ID: "Q72057594037927936"}, []core.Word{1, 0}, prov(), freshIDs(1)); err == nil {

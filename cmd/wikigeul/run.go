@@ -16,6 +16,9 @@ import (
 // ports Q<from>…Q<to>, then every property those documents use, all under
 // the one Issuer wikidata.geul.org (0x00010000; document IDs by
 // port.DocNumber), writes its documents.geul and, when asked, the report.
+// It keeps one connection with JIT off: the planner overestimates the
+// reference join (statement_reference ⋈ reference_snak) and JIT-compiles it,
+// about 160 ms per entity against 0.5 ms without (2026-10-27).
 func run(args []string) error {
 	c, err := parseFlags(args)
 	if err != nil {
@@ -26,6 +29,8 @@ func run(args []string) error {
 		return err
 	}
 	defer db.Close()
+	db.SetMaxOpenConns(1)
+	db.Exec("SET jit = off") // speed only: an error leaves JIT on
 	d, err := source.LoadDump(db, source.Store{Schema: c.Schema, Dump: c.Dump})
 	if err != nil {
 		return fmt.Errorf("dump %s/%d: %w", c.Schema, c.Dump, err)

@@ -1,5 +1,5 @@
 //ff:func feature=source type=loader control=iteration dimension=1
-//ff:what TestLoadEntityWith — Q42 loads; a missing ID is false; a failing existence, label, description, alias, claim, qualifier or sitelink query errors
+//ff:what TestLoadEntityWith — Q42 loads; a missing ID is false; a failing existence, label, description, alias, claim, qualifier, reference or sitelink query errors
 package source
 
 import "testing"
@@ -15,13 +15,14 @@ func TestLoadEntityWith(t *testing.T) {
 	}
 	bad := "SELECT nope FROM nowhere"
 	for i, b := range []entityQueries{
-		{Exists: bad, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, Sitelinks: q.Sitelinks},
-		{Exists: q.Exists, Labels: bad, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, Sitelinks: q.Sitelinks},
-		{Exists: q.Exists, Labels: q.Labels, Descriptions: bad, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, Sitelinks: q.Sitelinks},
-		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: bad, Claims: q.Claims, Qualifiers: q.Qualifiers, Sitelinks: q.Sitelinks},
-		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: bad, Qualifiers: q.Qualifiers, Sitelinks: q.Sitelinks},
-		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: bad, Sitelinks: q.Sitelinks},
-		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, Sitelinks: bad},
+		{Exists: bad, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, References: q.References, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: bad, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, References: q.References, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: q.Labels, Descriptions: bad, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, References: q.References, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: bad, Claims: q.Claims, Qualifiers: q.Qualifiers, References: q.References, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: bad, Qualifiers: q.Qualifiers, References: q.References, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: bad, References: q.References, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, References: bad, Sitelinks: q.Sitelinks},
+		{Exists: q.Exists, Labels: q.Labels, Descriptions: q.Descriptions, Aliases: q.Aliases, Claims: q.Claims, Qualifiers: q.Qualifiers, References: q.References, Sitelinks: bad},
 	} {
 		if _, _, err := loadEntityWith(db, b, "Q42"); err == nil {
 			t.Fatalf("bad %d: want error", i)

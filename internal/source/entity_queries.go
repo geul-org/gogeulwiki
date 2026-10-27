@@ -1,5 +1,5 @@
 //ff:type feature=source type=model
-//ff:what entityQueries — the SQL LoadEntity runs: existence, labels, descriptions, aliases, claims, qualifiers and sitelinks of one entity
+//ff:what entityQueries — the SQL LoadEntity runs: existence, labels, descriptions, aliases, claims, qualifiers, references and sitelinks of one entity
 package source
 
 // entityQueries is the SQL loadEntityWith runs for one entity ($1 = id;
@@ -11,5 +11,6 @@ type entityQueries struct {
 	Aliases      string
 	Claims       string
 	Qualifiers   string
+	References   string
 	Sitelinks    string
 }

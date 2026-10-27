@@ -1,18 +1,18 @@
 //ff:func feature=source type=loader control=sequence
-//ff:what loadEntityWith — an entity's labels, descriptions, aliases, claims and their qualifiers by the given queries; false when the ID was never loaded
+//ff:what loadEntityWith — an entity's revision, labels, descriptions, aliases, claims with their qualifiers and references by the given queries; false when the ID was never loaded
 package source
 
 import "database/sql"
 
-// loadEntityWith reads the entity id by q: existence and datatype, then labels, descriptions and
-// aliases in every language, then claims with their qualifiers (attachQualifiers), then sitelinks. It is false, with no error, when the entity does not
+// loadEntityWith reads the entity id by q: existence, datatype and revision, then labels, descriptions and
+// aliases in every language, then claims with their qualifiers (attachQualifiers) and
+// references (attachReferences), then sitelinks. It is false, with no error, when the entity does not
 // exist.
 func loadEntityWith(db *sql.DB, q entityQueries, id string) (Entity, bool, error) {
-	datatype, ok, err := entityHead(db, q.Exists, id)
+	e, ok, err := entityHead(db, q.Exists, id)
 	if err != nil || !ok {
 		return Entity{}, false, err
 	}
-	e := Entity{ID: id, Datatype: datatype}
 	if e.Labels, err = loadTexts(db, q.Labels, id); err != nil {
 		return Entity{}, false, err
 	}
@@ -30,6 +30,11 @@ func loadEntityWith(db *sql.DB, q entityQueries, id string) (Entity, bool, error
 		return Entity{}, false, err
 	}
 	attachQualifiers(e.Claims, qs)
+	rs, err := loadReferences(db, q.References, id)
+	if err != nil {
+		return Entity{}, false, err
+	}
+	attachReferences(e.Claims, rs)
 	if e.Sitelinks, err = loadSitelinks(db, q.Sitelinks, id); err != nil {
 		return Entity{}, false, err
 	}

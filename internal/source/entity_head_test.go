@@ -1,5 +1,5 @@
 //ff:func feature=source type=loader control=sequence
-//ff:what TestEntityHead — Q42 exists with no datatype, P31 with wikibase-item, a never-created ID does not, a closed handle errors
+//ff:what TestEntityHead — Q42 exists with no datatype and its revision, P31 with wikibase-item and no revision, a never-created ID does not, a closed handle errors
 package source
 
 import "testing"
@@ -7,11 +7,11 @@ import "testing"
 func TestEntityHead(t *testing.T) {
 	db, s := fixtureDB(t)
 	q := queriesFor(s).Exists
-	if dt, ok, err := entityHead(db, q, "Q42"); err != nil || !ok || dt != "" {
-		t.Fatalf("Q42: %q %v %v", dt, ok, err)
+	if e, ok, err := entityHead(db, q, "Q42"); err != nil || !ok || e.ID != "Q42" || e.Datatype != "" || e.LastRevID != 2557857485 || e.Modified != 1792210885 {
+		t.Fatalf("Q42: %+v %v %v", e, ok, err)
 	}
-	if dt, ok, err := entityHead(db, q, "P31"); err != nil || !ok || dt != "wikibase-item" {
-		t.Fatalf("P31: %q %v %v", dt, ok, err)
+	if e, ok, err := entityHead(db, q, "P31"); err != nil || !ok || e.Datatype != "wikibase-item" || e.LastRevID != 0 || e.Modified != 0 {
+		t.Fatalf("P31: %+v %v %v", e, ok, err)
 	}
 	if _, ok, err := entityHead(db, q, "Q6"); err != nil || ok {
 		t.Fatalf("Q6: %v %v", ok, err)

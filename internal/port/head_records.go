@@ -1,43 +1,40 @@
 //ff:func feature=port type=encoder control=iteration dimension=1
-//ff:what headRecords — the HEAD of a ported document: SPEC-VERSION, DOC-ID, SOURCE (dump, entity), ACQUIRED-AT, one TRANSFORMED-BY per tool
+//ff:what headRecords — the HEAD of a ported document: SPEC-VERSION, DOC-ID, one TRANSFORMED-BY per tool, the SOURCEs on the whole document (entity revision, dump file) with their QUALIFIERs; and the BODY records declaring their origins
 package port
 
 import (
 	"github.com/geul-org/gogeul/pkg/core"
+
+	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
-// headRecords writes the HEAD of the document for entity subject (its
-// Reference) numbered num under issuer: SPEC-VERSION, DOC-ID
-// DOC-POINTER(issuer, num, 0), SOURCE twice (the dump URI with the file's
-// SHA-256 (fileDigest), then the entity with its digest left out as the
-// Absent record),
-// ACQUIRED-AT (when the dump file was received) and one TRANSFORMED-BY per
-// tool in p.Tools: the tool's Reference (toolRef) and its commit
-// (CommitDigest). A malformed commit is an error. No wall-clock time is
-// written, so the same input and tools give the same document.
-func headRecords(issuer []core.Word, num uint64, subject core.Record, p Provenance) ([]core.Record, error) {
+// headRecords writes the HEAD of the document of entity e numbered num
+// under issuer: SPEC-VERSION, DOC-ID DOC-POINTER(issuer, num, 0), one
+// TRANSFORMED-BY per tool in p.Tools (the tool's Reference, toolRef, and its
+// commit, CommitDigest), then the HEAD Edges (document HEAD): the SOURCE on
+// the entity's revision (revisionSource) and the SOURCE on the dump file with
+// its QUALIFIERs (dumpSource). It also returns the BODY records that declare
+// those SOURCEs' origin LOCALs, to open the BODY with. Edge Ids come from a
+// in that order. A malformed Issuer, commit or digest is an error. No
+// wall-clock time is written, so the same input and tools give the same
+// document.
+func headRecords(issuer []core.Word, num uint64, e source.Entity, p Provenance, a IDs) (head, decl []core.Record, err error) {
 	id, err := core.EncodeDocID(issuer, []core.Word{core.Word(num >> 48), core.Word(num >> 32), core.Word(num >> 16), core.Word(num)})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	absent := core.Record{Kind: core.KindReference}
-	dump, err := fileDigest(p.DumpSHA256)
-	if err != nil {
-		return nil, err
-	}
-	rs := []core.Record{
-		core.EncodeSpecVersion(core.SpecVersion),
-		id,
-		compose(core.KindMeta, metaSource, core.EncodeBytesValue(codecURIEven, []byte(p.DumpURI)), dump),
-		compose(core.KindMeta, metaSource, subject, absent),
-		compose(core.KindMeta, metaAcquiredAt, core.EncodePosixSeconds(p.AcquiredAt)),
-	}
+	head = []core.Record{core.EncodeSpecVersion(core.SpecVersion), id}
 	for _, t := range p.Tools {
 		commit, err := CommitDigest(t.Commit)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-		rs = append(rs, compose(core.KindMeta, metaTransformedBy, toolRef(t.Doc), commit))
+		head = append(head, compose(core.KindMeta, metaTransformedBy, toolRef(t.Doc), commit))
 	}
-	return rs, nil
+	rev, revDecl := revisionSource(a, e)
+	dump, dumpDecl, err := dumpSource(a, p)
+	if err != nil {
+		return nil, nil, err
+	}
+	return append(append(head, rev...), dump...), append(revDecl, dumpDecl...), nil
 }
