@@ -2,7 +2,7 @@
 //ff:what IDs — where a ported document gets its LOCAL IDs: the GEUL library's carried-over assignment (delta.LocalIDs)
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // IDs hands out LOCAL IDs that carry over from the previous version of the
 // document (OVERVIEW 개정: same statement same ID, new ones from the auto

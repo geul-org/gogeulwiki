@@ -5,7 +5,7 @@ package port
 import "fmt"
 
 // DocNumber is the 4-word document ID of the Wikidata entity prefix+n under
-// the one Issuer wikidata.geul.org (wiki/README 문서 ID): the ASCII letter
+// the one Issuer wikidata.geul.org (README 문서 ID): the ASCII letter
 // (Q 0x51, P 0x50, L 0x4C …) in the top byte and n in the 56 bits below, so
 // the hex reads as the kind. n must be below 2^56.
 func DocNumber(prefix byte, n uint64) (uint64, error) {

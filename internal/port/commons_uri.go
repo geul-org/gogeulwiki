@@ -5,11 +5,11 @@ package port
 import (
 	"strings"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // commonsURI points at the Wikimedia Commons page prefix+name as a URI Value
-// (wiki/README 값 변환): a commonsMedia file name with prefix "File:", a
+// (README 값 변환): a commonsMedia file name with prefix "File:", a
 // geo-shape or tabular-data page name ("Data:…") with none. Spaces become _
 // as in MediaWiki titles and the title is percent-encoded as one path
 // segment (isSegmentByte), so ?, # and / in a title stay part of it.

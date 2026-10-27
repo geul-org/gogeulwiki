@@ -2,7 +2,7 @@
 //ff:what julianRecord — a GEDCOM-DATE Value for a Julian Wikidata time, or the reason it is not converted
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // julianRecord keeps a Julian Wikidata time as written: a GEDCOM-DATE Value
 // (gedcomString) checked by gedcom-go (gedcomValid). The Gregorian value of

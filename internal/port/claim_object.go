@@ -6,13 +6,13 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
 // claimObject returns the object record of c (objectRecord) and the reason it
-// is skipped. Every date, coordinate, monolingual text, url and quantity is kept (wiki/README
+// is skipped. Every date, coordinate, monolingual text, url and quantity is kept (README
 // 값 변환): a time, globecoordinate, monolingualtext, url or quantity
 // objectRecord cannot convert becomes its original
 // datavalue JSON as UTF8-TEXT, and raw names the conversion reason so the

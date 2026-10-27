@@ -5,7 +5,7 @@ package main
 import (
 	"testing"
 
-	"github.com/geul-org/wikiport/go/internal/port"
+	"github.com/geul-org/wikiport/internal/port"
 )
 
 func TestReportLine(t *testing.T) {

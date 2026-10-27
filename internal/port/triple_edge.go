@@ -2,7 +2,7 @@
 //ff:what tripleEdge — a TRIPLE Edge: Edge Id, Predicate, Subject, Object, rank word
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // tripleEdge builds a TRIPLE Edge (edge/TRIPLE): the LOCAL Edge Id, the
 // predicate (WIKIDATA-PID), the subject, the object record and the rank as

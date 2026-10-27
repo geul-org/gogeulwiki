@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/geul-org/geul/go/pkg/core"
-	"github.com/geul-org/geul/go/pkg/resolve"
+	"github.com/geul-org/gogeul/pkg/core"
+	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/wikiport/go/internal/port"
+	"github.com/geul-org/wikiport/internal/port"
 )
 
 // portIDs ports prefix+n for each n under issuer with prov (portOne). It returns the reports of

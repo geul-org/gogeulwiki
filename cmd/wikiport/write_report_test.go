@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/geul-org/wikiport/go/internal/port"
+	"github.com/geul-org/wikiport/internal/port"
 )
 
 func TestWriteReport(t *testing.T) {

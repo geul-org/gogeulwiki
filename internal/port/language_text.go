@@ -5,7 +5,7 @@ package port
 import (
 	"regexp"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 var bcp47Form = regexp.MustCompile(`^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$`)

@@ -3,7 +3,7 @@
 package port
 
 import (
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // headRecords writes the HEAD of the document for entity subject (its

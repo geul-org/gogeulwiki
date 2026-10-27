@@ -2,7 +2,7 @@
 //ff:what compose — a record whose payload is the given records one after another
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // compose builds a record of kind k and codec whose payload is parts, each
 // encoded whole (TAG and Length included), in order.

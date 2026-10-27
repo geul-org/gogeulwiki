@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // wikidataDecimal is a quantity amount or bound: an optional sign, digits,

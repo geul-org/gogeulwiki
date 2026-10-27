@@ -5,7 +5,7 @@ package port
 import (
 	"math"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // dayRecord converts the date of a day-precision Wikidata timestamp to

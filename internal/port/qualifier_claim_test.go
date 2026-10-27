@@ -5,7 +5,7 @@ package port
 import (
 	"testing"
 
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
 func TestQualifierClaim(t *testing.T) {

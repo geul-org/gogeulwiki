@@ -5,7 +5,7 @@ package main
 // config is one wikiport run: the t002 root whose .well-known/geul receives
 // the documents, the QID range [From, To], the label/description/alias
 // languages, the PostgreSQL DSN (empty: lib/pq reads the PG* environment
-// variables), the loaded dump to read (schema and dump_id, wiki/wikidata.sql),
+// variables), the loaded dump to read (schema and dump_id, sql/wikidata.sql),
 // the porter and GEUL library commits recorded in TRANSFORMED-BY and where
 // the report goes.
 type config struct {

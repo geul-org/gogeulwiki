@@ -5,11 +5,11 @@ package main
 import (
 	"strconv"
 
-	"github.com/geul-org/geul/go/pkg/core"
-	"github.com/geul-org/geul/go/pkg/delta"
-	"github.com/geul-org/geul/go/pkg/resolve"
+	"github.com/geul-org/gogeul/pkg/core"
+	"github.com/geul-org/gogeul/pkg/delta"
+	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/wikiport/go/internal/port"
+	"github.com/geul-org/wikiport/internal/port"
 )
 
 // carriedIDs reads the current version of id's document under issuer and its

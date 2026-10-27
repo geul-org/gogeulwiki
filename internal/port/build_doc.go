@@ -5,12 +5,12 @@ package port
 import (
 	"fmt"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
-// BuildDoc writes the document of entity e under issuer (wiki/README): the
+// BuildDoc writes the document of entity e under issuer (README): the
 // HEAD provenance (headRecords), then LABEL per label, DESCRIPTION per
 // description, ALIAS per alias, a property's datatype (datatypeEdges) and a
 // TRIPLE followed by its QUALIFIERs per convertible claim. Edge Ids come from a:

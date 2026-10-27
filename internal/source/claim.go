@@ -2,7 +2,7 @@
 //ff:what Claim — one Wikidata statement of a loaded dump: ID, property, value type, datatype, value, rank, and its qualifiers
 package source
 
-// Claim is one statement of a loaded dump (wiki/wikidata.sql statement): its
+// Claim is one statement of a loaded dump (sql/wikidata.sql statement): its
 // statement_id, the property of the main snak, the datavalue type
 // (wikibase-entityid, string, time, monolingualtext, globecoordinate,
 // quantity …), the property's datatype (url, commonsMedia, external-id …;

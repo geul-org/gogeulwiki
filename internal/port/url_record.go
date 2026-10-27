@@ -5,7 +5,7 @@ package port
 import (
 	"regexp"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // uriScheme is a URI scheme followed by its colon (RFC 3986 3.1).

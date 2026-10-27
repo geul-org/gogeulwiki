@@ -6,9 +6,9 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/geul-org/geul/go/pkg/core"
-	"github.com/geul-org/geul/go/pkg/resolve"
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/gogeul/pkg/core"
+	"github.com/geul-org/gogeul/pkg/resolve"
+	"github.com/geul-org/wikiport/internal/source"
 	_ "github.com/lib/pq"
 )
 

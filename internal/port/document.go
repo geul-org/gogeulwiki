@@ -2,7 +2,7 @@
 //ff:what document — a GEUL document of HEAD records, BODY, the BODY records and END, wrapped in DOC
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // document lays out head, the BODY marker, body and the END marker, and wraps
 // them in DOC (core.WrapDocument).

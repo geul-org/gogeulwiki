@@ -1,9 +1,9 @@
--- fixture.sql — a few entities in the wikidata schema (wiki/wikidata.sql) for wikiport's DB tests.
+-- fixture.sql — a few entities in the wikidata schema (sql/wikidata.sql) for wikiport's DB tests.
 -- Run after sections 1–3 with search_path set to the test schema. Q6 is left out (never created).
 INSERT INTO dump (dump_id, dump_date, file_name, url, size_bytes, sha256, downloaded_at, loader, loader_commit) VALUES
   (1, '2026-10-19', 'wikidata-20261019-all.json.bz2', 'https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all.json.bz2',
    103488697311, 'a249a19d12b1b0e8443248da3583090682be3f20c6bdd6ed1f7e1ae05b6b0774', '2026-10-26 06:34:43+00',
-   'github.com/geul-org/wikiport/go/cmd/wikiload', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
+   'github.com/geul-org/wikiport/cmd/wikiload', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
   (2, '2026-10-19', 'other.json.bz2', 'https://example.org/other', 1, '00', '2026-10-26 06:34:43+00', 'elsewhere/loader', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
 
 INSERT INTO entity (entity_id, line_no, kind, num, type, datatype, dump_id) VALUES

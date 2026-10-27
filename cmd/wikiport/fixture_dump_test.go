@@ -2,7 +2,7 @@
 //ff:what fixtureDump — test fixture: the dump row of testdata/fixture.sql as provenanceOf reads it
 package main
 
-import "github.com/geul-org/wikiport/go/internal/source"
+import "github.com/geul-org/wikiport/internal/source"
 
 // fixtureDump is a dump loaded by wikiload, for building a provenance.
 func fixtureDump() source.Dump {

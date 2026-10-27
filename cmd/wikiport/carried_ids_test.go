@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/geul-org/geul/go/pkg/core"
-	"github.com/geul-org/geul/go/pkg/resolve"
+	"github.com/geul-org/gogeul/pkg/core"
+	"github.com/geul-org/gogeul/pkg/resolve"
 )
 
 func TestCarriedIDs(t *testing.T) {

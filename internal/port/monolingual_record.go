@@ -5,7 +5,7 @@ package port
 import (
 	"encoding/json"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // monolingualRecord converts a monolingualtext datavalue

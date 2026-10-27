@@ -3,9 +3,9 @@
 package port
 
 import (
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
 // textEdges builds a LABEL, DESCRIPTION or ALIAS Edge (codec) on subject for each text,

@@ -2,7 +2,7 @@
 //ff:what edgeWith — an Edge whose Edge Id comes from the carried-over assignment for its content: records, then raw tail words
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // edgeWith builds an Edge of codec with parts (whole records) and tail (raw
 // words, such as TRIPLE's rank) after its Edge Id, which a asks for by that

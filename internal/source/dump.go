@@ -4,7 +4,7 @@ package source
 
 import "time"
 
-// Dump is the provenance of a loaded dump (wiki/wikidata.sql dump table):
+// Dump is the provenance of a loaded dump (sql/wikidata.sql dump table):
 // where it was downloaded from, the SHA-256 of the file in hex, when the file
 // was received, the loader that filled the tables (its Go package path) and
 // the loader's git commit.

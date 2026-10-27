@@ -2,7 +2,7 @@
 //ff:what rankWord — the TRIPLE rank code of a Wikidata rank: normal 0, preferred 1, deprecated 2; false for others
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // rankWord maps a Wikidata rank to the TRIPLE rank code (edge/TRIPLE ENUM):
 // normal 0, preferred 1, deprecated 2.

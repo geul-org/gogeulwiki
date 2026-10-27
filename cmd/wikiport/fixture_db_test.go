@@ -1,5 +1,5 @@
 //ff:func feature=cli type=command control=sequence
-//ff:what fixtureDB — test fixture: a throwaway schema of wiki/wikidata.sql holding testdata/fixture.sql, dropped after the test; skips when the database is not reachable
+//ff:what fixtureDB — test fixture: a throwaway schema of sql/wikidata.sql holding testdata/fixture.sql, dropped after the test; skips when the database is not reachable
 package main
 
 import (
@@ -14,7 +14,7 @@ import (
 )
 
 // fixtureDB opens the database of lib/pq's PG* environment variables, runs
-// sections 1–3 of wiki/wikidata.sql and testdata/fixture.sql under a fresh
+// sections 1–3 of sql/wikidata.sql and testdata/fixture.sql under a fresh
 // schema, drops it when the test ends and returns the schema name. It skips
 // the test when the database is not reachable.
 func fixtureDB(t *testing.T) (*sql.DB, string) {
@@ -27,7 +27,7 @@ func fixtureDB(t *testing.T) (*sql.DB, string) {
 		t.Skipf("database not reachable: %v", err)
 	}
 	t.Cleanup(func() { db.Close() })
-	ddl, err := os.ReadFile("../../../wikidata.sql")
+	ddl, err := os.ReadFile("../../sql/wikidata.sql")
 	if err != nil {
 		t.Fatal(err)
 	}

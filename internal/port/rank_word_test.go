@@ -5,7 +5,7 @@ package port
 import (
 	"testing"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 func TestRankWord(t *testing.T) {

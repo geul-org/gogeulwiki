@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/geul-org/wikiport/go/internal/port"
+	"github.com/geul-org/wikiport/internal/port"
 )
 
 // parseFlags reads args into a config. -commit and -lib-commit (the full git

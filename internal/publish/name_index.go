@@ -5,7 +5,7 @@ package publish
 import (
 	"slices"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // NameIndex writes the documents.geul of issuer (GEUL-ORG 문서 이름): one BIND

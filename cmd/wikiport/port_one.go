@@ -5,11 +5,11 @@ package main
 import (
 	"database/sql"
 
-	"github.com/geul-org/geul/go/pkg/core"
-	"github.com/geul-org/geul/go/pkg/resolve"
+	"github.com/geul-org/gogeul/pkg/core"
+	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/wikiport/go/internal/port"
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/wikiport/internal/port"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
 // portOne ports entity id: loads it from c's dump (source.LoadEntity), builds

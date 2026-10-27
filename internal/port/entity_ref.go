@@ -2,7 +2,7 @@
 //ff:what entityRef — the GEUL Reference of a Wikidata item or property ID (WIKIDATA-QID, WIKIDATA-PID); false for other IDs
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // entityRef returns the direct Reference of a Wikidata item (Q → WIKIDATA-QID)
 // or property (P → WIKIDATA-PID), Quantifier Identified, the number in the

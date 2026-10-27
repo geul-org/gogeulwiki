@@ -3,9 +3,9 @@
 package port
 
 import (
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
 // objectRecord converts the value of c: an entity ID to its Reference
@@ -17,7 +17,7 @@ import (
 // "time: …" or "globecoordinate: …" reason; claimObject keeps it as original
 // text. An empty value is a novalue
 // or somevalue snak. Other value
-// types are not converted in this pass (wiki/README 작업 범위); the reason
+// types are not converted in this pass (README 작업 범위); the reason
 // names what was skipped.
 func objectRecord(c source.Claim) (core.Record, string) {
 	if c.Value == "" {

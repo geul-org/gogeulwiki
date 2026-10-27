@@ -2,7 +2,7 @@
 //ff:what digestWords — digest bytes as WORDs, two octets each with the first high (SHA-256-DIGEST framing)
 package port
 
-import "github.com/geul-org/geul/go/pkg/core"
+import "github.com/geul-org/gogeul/pkg/core"
 
 // digestWords frames an even-length digest b as WORDs: octets 2i and 2i+1
 // become WORD i, the first octet high (value/binary/SHA-256-DIGEST).

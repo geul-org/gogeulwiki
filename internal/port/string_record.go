@@ -5,8 +5,8 @@ package port
 import (
 	"unicode/utf8"
 
-	"github.com/geul-org/geul/go/pkg/core"
-	"github.com/geul-org/wikiport/go/internal/source"
+	"github.com/geul-org/gogeul/pkg/core"
+	"github.com/geul-org/wikiport/internal/source"
 )
 
 // stringRecord converts a string datavalue by the property's datatype

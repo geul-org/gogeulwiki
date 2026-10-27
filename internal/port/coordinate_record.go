@@ -7,7 +7,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/geul-org/geul/go/pkg/core"
+	"github.com/geul-org/gogeul/pkg/core"
 )
 
 // coordinateRecord converts a globecoordinate datavalue: on Earth (globe Q2)
