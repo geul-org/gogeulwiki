@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=iteration dimension=1
-//ff:what TestCoordinateRecord — Berlin becomes the docs' COORDINATE-EARTH (1 arcminute) and its precision text comes back, Mars a COORDINATE-GEO with no precision (unknown); bad JSON, globe, altitude, range and a precision no unit gives back give reasons
+//ff:what TestCoordinateRecord — Berlin becomes the docs' COORDINATE-EARTH (1 arcminute) and its precision text comes back, Mars a COORDINATE-GEO with no precision (unknown); the longitude range [-360, 360] off Earth and [-180, 180] on Earth at its bounds; bad JSON, globe, altitude, range and a precision no unit gives back give reasons
 package port
 
 import (
@@ -27,6 +27,32 @@ func TestCoordinateRecord(t *testing.T) {
 	r, _ = coordinateRecord(`{"latitude":1,"longitude":2,"precision":0.0000010,"globe":"` + e + `Q405"}`)
 	if c, _ := core.DecodeCoordinate(r); c.Globe == nil || c.Uncertainty != float32(1e-6) || c.Unit == nil || c.Unit.Payload[0] != 28390 {
 		t.Fatalf("moon, 1e-6 degree kept: %+v", c)
+	}
+	for _, v := range []string{
+		`{"latitude":-10,"longitude":-340,"precision":1,"globe":"` + e + `Q2565"}`,
+		`{"latitude":1,"longitude":-360,"globe":"` + e + `Q111"}`,
+		`{"latitude":1,"longitude":360,"globe":"` + e + `Q111"}`,
+		`{"latitude":1,"longitude":-180,"globe":"` + e + `Q2"}`,
+		`{"latitude":1,"longitude":180,"globe":"` + e + `Q2"}`,
+	} {
+		if r, reason := coordinateRecord(v); reason != "" || r.Kind != core.KindValue {
+			t.Fatalf("%s: in range, got %q", v, reason)
+		}
+	}
+	if r, _ := coordinateRecord(`{"latitude":-10,"longitude":-340,"precision":1,"globe":"` + e + `Q2565"}`); r.Codec != core.CodecCoordinateGeo {
+		t.Fatalf("Q114733 P625: codec 0x%02X", r.Codec)
+	} else if c, _ := core.DecodeCoordinate(r); c.Lat != -10 || c.Lon != -340 || c.Globe == nil || c.Globe.Payload[len(c.Globe.Payload)-1] != 2565 {
+		t.Fatalf("Q114733 P625: %+v", c)
+	}
+	for _, v := range []string{
+		`{"latitude":1,"longitude":-360.000001,"globe":"` + e + `Q111"}`,
+		`{"latitude":1,"longitude":360.000001,"globe":"` + e + `Q111"}`,
+		`{"latitude":1,"longitude":-181,"globe":"` + e + `Q2"}`,
+		`{"latitude":91,"longitude":10,"globe":"` + e + `Q111"}`,
+	} {
+		if _, reason := coordinateRecord(v); reason != "globecoordinate: 범위" {
+			t.Fatalf("%s: %q want 범위", v, reason)
+		}
 	}
 	for want, v := range map[string]string{
 		"globecoordinate: JSON 아님": "{",

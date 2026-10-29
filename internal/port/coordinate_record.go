@@ -16,7 +16,8 @@ import (
 // unit item (coordinatePrecision, the precision's text as the value has
 // it); a missing precision is an unknown uncertainty (unit ABSENT). A value
 // with no or a non-item globe, an altitude (the formats hold none), degrees
-// out of range or a precision no unit gives back gives its reason
+// out of range (longitude [-180, 180] on Earth, [-360, 360] elsewhere as
+// Wikidata allows) or a precision no unit gives back gives its reason
 // (claimObject keeps such values as original text).
 func coordinateRecord(value string) (core.Record, string) {
 	var v struct {
@@ -37,6 +38,7 @@ func coordinateRecord(value string) (core.Record, string) {
 	if earth {
 		lonMax = 180
 	}
+	lonMin := -lonMax
 	c := core.Coordinate{Lat: v.Lat, Lon: v.Lon}
 	if !earth {
 		c.Globe = &globe
@@ -52,7 +54,7 @@ func coordinateRecord(value string) (core.Record, string) {
 		return core.Record{}, "globecoordinate: 천체 없음"
 	case v.Altitude != nil:
 		return core.Record{}, "globecoordinate: 고도"
-	case v.Lat < -90 || v.Lat > 90 || v.Lon < -180 || v.Lon > lonMax:
+	case v.Lat < -90 || v.Lat > 90 || v.Lon < lonMin || v.Lon > lonMax:
 		return core.Record{}, "globecoordinate: 범위"
 	case !okPrecision:
 		return core.Record{}, "globecoordinate: 정밀도"
