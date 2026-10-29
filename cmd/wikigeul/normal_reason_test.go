@@ -12,7 +12,9 @@ func TestNormalReason(t *testing.T) {
 		{"skipped", "개체: L", true}, {"skipped", "qualifier 개체: E", true}, {"skipped", "reference 개체: L", true},
 		{"skipped", "개체: M", false}, {"skipped", "형식 미지원: x", false}, {"skipped", "언어 코드: x y", false},
 		{"raw", "globecoordinate: 정밀도", true}, {"raw", "qualifier time: GEDCOM 대응 없는 정밀도 세기", true},
-		{"raw", "time: 0년", false}, {"warn", "E6", true}, {"warn", "E7", false}, {"error", "E6", false},
+		{"raw", "time: 0년", true}, {"raw", "qualifier time: 범위", true}, {"raw", "reference globecoordinate: 범위", true},
+		{"raw", "qualifier time: 달력 http://www.wikidata.org/entity/Q1985728", true}, {"raw", "time: 달력 http://www.wikidata.org/entity/Q12138", false},
+		{"raw", "quantity: 단위", false}, {"warn", "E6", true}, {"warn", "E7", false}, {"error", "E6", false},
 	} {
 		if got := normalReason(c.kind, c.reason); got != c.want {
 			t.Errorf("%s %q: %v", c.kind, c.reason, got)
