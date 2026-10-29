@@ -15,19 +15,33 @@ import "github.com/geul-org/wikigeul/internal/port"
 // to read the GEUL Language Registry from (LangRoot "" is Root, LangVer 0 the
 // newest at the start of the run); run reads it once into Langs and LangDoc
 // (languageRegistry), so every document of a run uses the same registry.
+// Out is "pack" (default: the Issuer's pack set under Root written as one
+// stream, runPack) or "dir" (the directory tree, for tests). Pack mode
+// converts with Workers goroutines, the entities of IDs (a file of Q/P IDs)
+// or else every property and Q<From>…Q<To>, checkpoints every Every
+// documents, Resume continues an interrupted run, RecordedAt is the
+// RECORDED-AT of every version list (0: the run's start) and Samples how many
+// documents train the zstd dictionary.
 type config struct {
-	Root      string
-	From      uint64
-	To        uint64
-	DSN       string
-	Schema    string
-	Dump      int16
-	Commit    string
-	LibCommit string
-	Report    string
-	RefOrder  bool
-	LangRoot  string
-	LangVer   uint32
-	Langs     port.Languages
-	LangDoc   string
+	Root       string
+	From       uint64
+	To         uint64
+	DSN        string
+	Schema     string
+	Dump       int16
+	Commit     string
+	LibCommit  string
+	Report     string
+	RefOrder   bool
+	LangRoot   string
+	LangVer    uint32
+	Langs      port.Languages
+	LangDoc    string
+	Out        string
+	Workers    int
+	IDs        string
+	Every      int64
+	Resume     bool
+	RecordedAt int64
+	Samples    int
 }

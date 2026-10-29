@@ -12,7 +12,7 @@ import (
 // writeReport writes reps to path as TSV (reportLine) after the comment line
 // head (runLine) and a header line.
 func writeReport(path, head string, reps []port.Report) error {
-	lines := []string{head, "id\tstatus\tlabels\tdescriptions\taliases\ttriples\tqualifiers\tsitelinks\tbadges\tskipped\traw\tmarkers\tsources\torigin_qid\torigin_absent\torigin_local\torigin_edges\tsource_qualifiers\tref_mismatch"}
+	lines := []string{head, reportHeader}
 	for _, r := range reps {
 		lines = append(lines, reportLine(r))
 	}

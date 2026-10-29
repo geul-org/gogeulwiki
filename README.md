@@ -26,7 +26,9 @@ wikigeul -root ./archive -from 1 -to 1000 \
   -report report.tsv
 ```
 
-This converts Q1–Q1000, then every property those documents use, and writes the Issuer's name index `documents.geul` (`q42`, `p31`, …). Documents are written to `<root>/.well-known/geul/`. The index keeps documents already published there, so a range can be converted in several runs.
+By default (`-out pack`) the documents go straight into the Issuer's pack set `<root>/.well-known/geul/0x00010000/` (zstd, with a dictionary trained on the run's first Q documents): every property of the dump, then the dump's items Q<from>…Q<to> (or the entities of `-ids`), converted by `-workers` goroutines with their own database connections and written in document key order as one stream (gogeul `pack.Stream`). Each document is version 1 with its version list and is also served by content hash under `h/` without a copy. No `documents.geul` is written in pack mode: for all of Wikidata it would be a single 4 GB document, and a document's name follows from its ID. The run checkpoints every `-checkpoint` documents; `-resume` continues an interrupted run, which must be the same run (commits, registry version, dump, range or ID list, `-recorded-at`). The set must not exist yet: pack mode writes a whole new set.
+
+With `-out dir` (for tests) it converts Q1–Q1000, then every property those documents use, into the directory tree `<root>/.well-known/geul/` and writes the Issuer's name index `documents.geul` (`q42`, `p31`, …). The index keeps documents already published there, so a range can be converted in several runs. Both modes give the same document bytes for the same input and commits.
 
 The database connection comes from `-dsn` or, when it is empty, from the standard libpq environment variables (`PGHOST`, `PGPORT`, `PGUSER`, `PGDATABASE`, …) and the password file `~/.pgpass`.
 
@@ -40,6 +42,13 @@ The database connection comes from `-dsn` or, when it is empty, from the standar
 | `-schema` | Schema of the loaded dump (wikipg `-schema`) | `wikidata` |
 | `-dump-id` | Which loaded dump to read (wikipg `-dump-id`, 1–255) | `1` |
 | `-report` | Write a per-entity TSV report to this path | none |
+| `-out` | `pack` (the Issuer's pack set, streamed) or `dir` (directory tree, for tests) | `pack` |
+| `-workers` | Pack mode: conversion goroutines, each with a database connection | 70% of the CPUs halved (a database backend per worker) |
+| `-ids` | Pack mode: file of entity IDs (`Q…`/`P…`, one per line) instead of every property and the Q range | none |
+| `-checkpoint` | Pack mode: documents between checkpoints | `100000` |
+| `-resume` | Pack mode: continue the interrupted run from its last checkpoint | off |
+| `-recorded-at` | Pack mode: RECORDED-AT of every version list (Unix seconds) | the run's start |
+| `-samples` | Pack mode: Q documents the zstd dictionary is trained on | `2048` |
 | `-langreg-root` | Archive to read the GEUL Language Registry (spec document `0x0000/0x0000000000000848`) from | `-root` |
 | `-langreg-version` | Version of that spec document to use | `0`: the newest when the run starts |
 
@@ -47,7 +56,7 @@ Language codes: each Wikimedia language code is mapped to a BCP 47 tag; when the
 
 The report starts with a comment line recording the run (`# wikigeul -from … -to … -schema … -dump-id … -commit … -lib-commit … -langreg 0x0000/0x0000000000000848@n 0x<hash>`), then a header and one line per ID in the range. `status` is `ok` (document written) or `missing` (no such entity in the dump). The other columns count what was written and what was skipped: `labels`, `descriptions`, `aliases`, `triples`, `qualifiers`, `sitelinks`, `badges`, `skipped`, `raw` (values kept as original text), `markers` (unknown/no-value markers), and the reference columns `sources`, `origin_qid`, `origin_absent`, `origin_local`, `origin_edges`, `source_qualifiers`, `ref_mismatch` (must be 0).
 
-Each run overwrites version 1 of each document; when the content is unchanged no file is touched. Edge IDs are carried over from the previously published version, so unchanged statements keep their numbers.
+In directory mode each run overwrites version 1 of each document; when the content is unchanged no file is touched, and Edge IDs are carried over from the previously published version, so unchanged statements keep their numbers. Pack mode writes a new set, so IDs start from 1 as for a document never published. Lexemes (`L…`, dump 2) are not converted.
 
 ## Documentation
 

@@ -40,7 +40,11 @@ func run(args []string) error {
 		return fmt.Errorf("dump %s/%d: %w", c.Schema, c.Dump, err)
 	}
 	c.RefOrder = d.RefOrder
-	if c.Langs, c.LangDoc, err = languageRegistry(resolve.Dir{Root: c.LangRoot}, c.LangVer); err != nil {
+	reg, err := registryDir(c.LangRoot)
+	if err != nil {
+		return err
+	}
+	if c.Langs, c.LangDoc, err = languageRegistry(reg, c.LangVer); err != nil {
 		return err
 	}
 	fmt.Printf("language registry: %s, %d tags\n", c.LangDoc, len(c.Langs))
@@ -48,6 +52,9 @@ func run(args []string) error {
 	prov, err := provenanceOf(d, c.Commit, c.LibCommit)
 	if err != nil {
 		return err
+	}
+	if c.Out == "pack" {
+		return runPack(c, conn, db, prov)
 	}
 	dir := resolve.Dir{Root: c.Root}
 	issuer := []core.Word{1, 0}

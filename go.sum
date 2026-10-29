@@ -1,9 +1,11 @@
 github.com/cacack/gedcom-go/v3 v3.2.0 h1:maqzijLQW/MxujHqfqdEziNQgJZpd6tcxkujPLFD+dY=
 github.com/cacack/gedcom-go/v3 v3.2.0/go.mod h1:5ekehkreOOKz+SZ/gjcZ3vApMihE6ycHuYMkYNkVYE8=
-github.com/geul-org/gogeul v0.0.0-20261029151216-6b0e5b0f3fd1 h1:D30SUDVZptBjzyQ64dLGn+dKtWuse26rXsUSVV4dGcE=
-github.com/geul-org/gogeul v0.0.0-20261029151216-6b0e5b0f3fd1/go.mod h1:Tk+96pdiRaY3fCBmbDPzHjs467785ed5+C45L3wbyVQ=
+github.com/geul-org/gogeul v0.0.0-20261029155202-1493d8c6b339 h1:y1Mfe6qGEsmqjkCQxaVfbM/2Rz5QMBoa1ALHeb2XF6Y=
+github.com/geul-org/gogeul v0.0.0-20261029155202-1493d8c6b339/go.mod h1:Tk+96pdiRaY3fCBmbDPzHjs467785ed5+C45L3wbyVQ=
 github.com/geul-org/wikipg v0.0.0-20261028033145-a2fa225720c2 h1:nid7Q65kGfUuniLuKmuwLdLRk4/odLyDhUZM4Re+nNk=
 github.com/geul-org/wikipg v0.0.0-20261028033145-a2fa225720c2/go.mod h1:lrfzBEWX2zAxjfL0EYnzMinYkgsRlK7WsH/vvDSPi70=
+github.com/klauspost/compress v1.20.3 h1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4=
+github.com/klauspost/compress v1.20.3/go.mod h1:LUdAzn7YLVvxLpc7y3V1m40wESHTgc1422pwwBSKYuI=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
 github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
 github.com/sfomuseum/go-edtf v1.3.0 h1:07oBf8NcWmpwIzUz/WMgTz1huQNVdiJ/IjFzkIRGj2Q=

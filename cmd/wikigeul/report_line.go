@@ -13,6 +13,9 @@ import (
 // header).
 const reportColumns = 17
 
+// reportHeader is the report's column line, after the run line.
+const reportHeader = "id\tstatus\tlabels\tdescriptions\taliases\ttriples\tqualifiers\tsitelinks\tbadges\tskipped\traw\tmarkers\tsources\torigin_qid\torigin_absent\torigin_local\torigin_edges\tsource_qualifiers\tref_mismatch"
+
 // reportLine formats r as ID, status, labels, descriptions, aliases, triples,
 // qualifiers, sitelinks, badges and the skipped reasons, then the reasons of
 // dates kept as original text, then the slot markers written for
