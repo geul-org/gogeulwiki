@@ -36,8 +36,9 @@ wikigeul binary:
     URL:         https://github.com/cacack/gedcom-go
 
 It also uses, from the same project (CC0): the GEUL library
-github.com/geul-org/gogeul (pkg/... only, no third-party dependencies) and,
-in tests only, the schema package github.com/geul-org/wikipg/sql.
+github.com/geul-org/gogeul (the pkg/... packages it uses: core, codecspec,
+delta, inspect, resolve and toulmin, which have no third-party dependencies)
+and, in tests only, the schema package github.com/geul-org/wikipg/sql.
 
 Binaries also contain the Go standard library (BSD-3-Clause,
 Copyright (c) 2009 The Go Authors), including the golang.org/x packages it

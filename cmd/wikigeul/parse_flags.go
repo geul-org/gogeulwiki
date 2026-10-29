@@ -18,7 +18,7 @@ func parseFlags(args []string) (config, error) {
 	fs := flag.NewFlagSet("wikigeul", flag.ContinueOnError)
 	var c config
 	var dump int
-	fs.StringVar(&c.Root, "root", ".", "archive root holding .well-known/geul (geul-dev draft/)")
+	fs.StringVar(&c.Root, "root", ".", "archive root holding .well-known/geul (geul-dev draft/geul-org/artifacts/geul)")
 	fs.Uint64Var(&c.From, "from", 1, "first QID number")
 	fs.Uint64Var(&c.To, "to", 1000, "last QID number")
 	fs.StringVar(&c.DSN, "dsn", "", "PostgreSQL DSN (empty: PG* environment variables)")
