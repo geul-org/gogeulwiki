@@ -33,7 +33,7 @@ func fixtureDB(t *testing.T) (*sql.DB, Store) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	name := fmt.Sprintf("gogeulwiki_test_%d", time.Now().UnixNano())
+	name := fmt.Sprintf("wikigeul_test_%d", time.Now().UnixNano())
 	set := "CREATE SCHEMA " + name + ";\nSET search_path = " + name + ";"
 	script := strings.Replace(wikisql.Schema, "CREATE SCHEMA IF NOT EXISTS wikidata;\nSET search_path = wikidata;", set, 1) + "\nSET search_path = " + name + ";\n" + string(fix)
 	if _, err := db.Exec(script); err != nil {

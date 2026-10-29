@@ -1,4 +1,4 @@
-module github.com/geul-org/gogeulwiki
+module github.com/geul-org/wikigeul
 
 go 1.25.11
 

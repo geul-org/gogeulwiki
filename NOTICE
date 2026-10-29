@@ -1,4 +1,4 @@
-gogeulwiki
+wikigeul
 The GEUL project's own work in this repository is dedicated to the public
 domain under CC0 1.0 Universal (see LICENSE). The third-party components
 listed below keep their own licenses and are not covered by CC0.
@@ -8,7 +8,7 @@ This product includes software developed by third parties.
 ================================================================================
 
 --------------------------------------------------------------------------------
-Go (module: github.com/geul-org/gogeulwiki)
+Go (module: github.com/geul-org/wikigeul)
 --------------------------------------------------------------------------------
 The following third-party packages are compiled into / linked with the
 wikigeul binary:

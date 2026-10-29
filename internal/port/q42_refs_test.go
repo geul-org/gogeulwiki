@@ -2,7 +2,7 @@
 //ff:what q42Refs — test fixture: references of Q42 P19 as the 20261019 dump has them (Britannica, Guardian, Telegraph, GND) plus URL-only, imported-from, P248 somevalue and the Guardian again in another snaks-order
 package port
 
-import "github.com/geul-org/gogeulwiki/internal/source"
+import "github.com/geul-org/wikigeul/internal/source"
 
 // q42Refs returns references shaped like Q42's (wikidata.reference_snak,
 // dump 1, 2026-10-27): ① Britannica (P248 + P1417), ② Guardian (URL,

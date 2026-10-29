@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
+	"github.com/geul-org/wikigeul/internal/port"
 )
 
 func TestPropertyNumbers(t *testing.T) {

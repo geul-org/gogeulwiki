@@ -5,7 +5,7 @@ package port
 import (
 	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // objectRecord converts the value of c: an entity ID to its Reference

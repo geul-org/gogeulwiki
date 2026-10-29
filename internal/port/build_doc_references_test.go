@@ -11,7 +11,7 @@ import (
 	"github.com/geul-org/gogeul/pkg/delta"
 	"github.com/geul-org/gogeul/pkg/schema"
 
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 func TestBuildDocReferences(t *testing.T) {

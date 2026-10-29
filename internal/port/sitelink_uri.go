@@ -7,7 +7,7 @@ import (
 
 	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // sitelinkURI builds the canonical page URL of s (README sitelink): the

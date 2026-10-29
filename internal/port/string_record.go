@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/geul-org/gogeul/pkg/core"
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // stringRecord converts a string datavalue by the property's datatype

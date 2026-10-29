@@ -1,4 +1,4 @@
-# gogeulwiki
+# wikigeul
 
 `wikigeul` converts Wikidata entities into [GEUL](https://geul.org/) documents. It reads a Wikidata dump that [wikipg](https://github.com/geul-org/wikipg) has loaded into PostgreSQL and publishes one `.geul` document per item or property — labels, descriptions, aliases, claims with qualifiers and references, and sitelinks in every language — under `.well-known/geul/`.
 
@@ -7,7 +7,7 @@ All documents are published under one Issuer, `wikidata.geul.org` (`0x00010000`)
 ## Install
 
 ```sh
-go install github.com/geul-org/gogeulwiki/cmd/wikigeul@latest
+go install github.com/geul-org/wikigeul/cmd/wikigeul@latest
 ```
 
 ## Requirements

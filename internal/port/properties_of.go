@@ -5,7 +5,7 @@ package port
 import (
 	"strings"
 
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // propertiesOf returns the properties a converted claim uses: the predicate,

@@ -1,5 +1,5 @@
 //ff:func feature=port type=encoder control=sequence
-//ff:what TestToolRef — gogeulwiki (document 1) encodes as the GEUL-ORG table's Reference
+//ff:what TestToolRef — wikigeul (document 1) encodes as the GEUL-ORG table's Reference
 package port
 
 import (

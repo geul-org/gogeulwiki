@@ -5,8 +5,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/port"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // wikipgPath is the loader that wikipg (github.com/geul-org/wikipg) records in
@@ -21,7 +21,7 @@ const (
 
 // provenanceOf is the provenance of dump d (README 출처 기록): its URL,
 // file SHA-256 and download time, then the tools as geul.org term definition
-// documents (GEUL-ORG) — wikigeul (document 1, gogeulwiki) at commit and the
+// documents (GEUL-ORG) — wikigeul (document 1, this repository) at commit and the
 // GEUL library (document 2, gogeul) at libCommit. The loader is not a tool of
 // the document: wikipg stores the dump losslessly (every line in
 // entity_raw, values text or jsonb cannot hold in *_json), so the document

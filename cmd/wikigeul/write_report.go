@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
+	"github.com/geul-org/wikigeul/internal/port"
 )
 
 // writeReport writes reps to path as TSV (reportLine) after the comment line

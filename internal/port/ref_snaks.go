@@ -2,7 +2,7 @@
 //ff:what refSnaks — the convertible snaks of a reference, in snaks-order; the others counted by reason with the prefix "reference "
 package port
 
-import "github.com/geul-org/gogeulwiki/internal/source"
+import "github.com/geul-org/wikigeul/internal/source"
 
 // refSnaks converts each snak of r like a qualifier (qualifierClaim,
 // claimObject; somevalue/novalue become slot markers). A snak whose property

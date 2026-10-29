@@ -5,7 +5,7 @@ package port
 import (
 	"github.com/geul-org/gogeul/pkg/core"
 
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // tripleEdges builds a TRIPLE on subject for each claim whose predicate,

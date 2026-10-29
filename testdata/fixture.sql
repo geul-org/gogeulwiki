@@ -1,4 +1,4 @@
--- fixture.sql — a few entities in the wikidata schema (wikipg sql/wikidata.sql) for gogeulwiki's DB tests.
+-- fixture.sql — a few entities in the wikidata schema (wikipg sql/wikidata.sql) for wikigeul's DB tests.
 -- Run after sections 1–3 with search_path set to the test schema. Q6 is left out (never created).
 -- Q42 has labels in three languages (mul included) and sitelinks of several sites, one unknown.
 -- Q7 holds \u0000 values that wikipg keeps in the *_json columns (value NULL or cleaned).

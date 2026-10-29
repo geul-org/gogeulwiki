@@ -9,7 +9,7 @@ import (
 	"github.com/geul-org/gogeul/pkg/delta"
 	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
+	"github.com/geul-org/wikigeul/internal/port"
 )
 
 // carriedIDs reads the current version of id's document under issuer and its

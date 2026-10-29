@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
+	"github.com/geul-org/wikigeul/internal/port"
 )
 
 // reportColumns is the number of columns after ID and status (writeReport's

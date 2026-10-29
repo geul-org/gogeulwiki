@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/port"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 func TestProvenanceOf(t *testing.T) {

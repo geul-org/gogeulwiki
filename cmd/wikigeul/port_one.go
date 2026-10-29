@@ -8,8 +8,8 @@ import (
 	"github.com/geul-org/gogeul/pkg/core"
 	"github.com/geul-org/gogeul/pkg/resolve"
 
-	"github.com/geul-org/gogeulwiki/internal/port"
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/port"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 // portOne ports entity id: loads it from c's dump (source.LoadEntity, each

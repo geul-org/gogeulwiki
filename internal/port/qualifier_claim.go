@@ -2,7 +2,7 @@
 //ff:what qualifierClaim — a qualifier as a claim value claimObject converts (snak type kept)
 package port
 
-import "github.com/geul-org/gogeulwiki/internal/source"
+import "github.com/geul-org/wikigeul/internal/source"
 
 // qualifierClaim returns q as a claim (property, type, datatype, value and snak type) so the value
 // converts like a main value (claimObject). Both come in the same form from

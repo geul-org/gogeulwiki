@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/geul-org/gogeul/pkg/core"
-	"github.com/geul-org/gogeulwiki/internal/source"
+	"github.com/geul-org/wikigeul/internal/source"
 )
 
 func TestSourceEdges(t *testing.T) {
