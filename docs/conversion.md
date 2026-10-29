@@ -55,21 +55,44 @@ Edge Id(LOCAL ID)는 버전을 넘어 유지한다. 다시 생성할 때 직전 
 
 ## 언어 코드 대응
 
-위키미디어 언어 코드 중 BCP 47이 아닌 14개는 BCP 47 tag로 옮긴다(`port.wikimediaLanguage`, 대소문자 무시). 근거는 IANA Language Subtag Registry 항목이다(IANA 프로토콜 레지스트리, CC0 1.0: [IANA licensing terms](https://www.iana.org/help/licensing-terms)).
+위키미디어 언어 코드 중 유효한 BCP 47이 아닌 14개는 BCP 47 tag로 옮긴다(`port.wikimediaLanguage`, 대소문자 무시). 나머지 코드는 그대로 쓴다. 근거는 IANA Language Subtag Registry 항목이다(File-Date 2026-09-17, IANA 프로토콜 레지스트리, CC0 1.0: [IANA licensing terms](https://www.iana.org/help/licensing-terms)).
 
-| 위키미디어 | BCP 47 | | 위키미디어 | BCP 47 |
-|---|---|---|---|---|
-| `sr-el` | `sr-Latn` | | `map-bms` | `jv-x-bms` |
-| `bat-smg` | `sgs` | | `roa-tara` | `nap-x-tara` |
-| `fiu-vro` | `vro` | | `de-formal` | `de-x-formal` |
-| `cbk-zam` | `cbk` | | `es-formal` | `es-x-formal` |
-| `simple` | `en-simple` | | `hu-formal` | `hu-x-formal` |
-| `eml` | `egl` | | `nl-informal` | `nl-x-informal` |
-| `roa-rup` | `rup` | | | |
-| `zh-classical` | `lzh` | | | |
+| 위키미디어 | BCP 47 | IANA 근거 |
+|---|---|---|
+| `sr-el` | `sr-Latn-x-srel` | language `sr`, script `Latn` + 사설 확장 |
+| `bat-smg` | `sgs-x-batsmg` | language `sgs`(Samogitian) + 사설 확장 |
+| `fiu-vro` | `vro-x-fiuvro` | language `vro`(Võro) + 사설 확장 |
+| `cbk-zam` | `cbk-x-cbkzam` | language `cbk`(Chavacano) + 사설 확장 |
+| `simple` | `en-simple` | language `en`, variant `simple`(Simplified form) |
+| `eml` | `roa-x-eml` | language `roa`(Romance languages, collection) + 사설 확장. `eml`은 레지스트리에 없다 |
+| `roa-rup` | `rup-x-roarup` | language `rup`(Aromanian) + 사설 확장 |
+| `zh-classical` | `lzh-x-zhclass` | language `lzh`(Literary Chinese) + 사설 확장 |
+| `map-bms` | `jv-x-bms` | language `jv` + 사설 확장 |
+| `roa-tara` | `nap-x-tara` | language `nap` + 사설 확장 |
+| `de-formal` | `de-x-formal` | language `de` + 사설 확장 |
+| `es-formal` | `es-x-formal` | language `es` + 사설 확장 |
+| `hu-formal` | `hu-x-formal` | language `hu` + 사설 확장 |
+| `nl-informal` | `nl-x-informal` | language `nl` + 사설 확장 |
 
-- 사설 확장(`x-`)의 뜻: `x-formal` 존댓말(격식체), `x-informal` 반말(비격식체), `x-bms` 자바어 반유마스 방언, `x-tara` 나폴리어 타란토 방언.
+- **일대일:** 서로 다른 위키미디어 코드는 서로 다른 tag가 된다. 위키데이터는 `sgs`와 `bat-smg`, `vro`와 `fiu-vro`, `rup`와 `roa-rup`, `lzh`와 `zh-classical`, `egl`와 `eml`을 모두 용어 언어로 받고, `sr-latn`와 `sr-el`, `cbk`와 `cbk-zam`을 모두 monolingualtext 언어로 받는다. 그래서 대상 tag가 그 자체로 위키데이터 코드인 경우, BCP 47이 아닌 쪽에 사설 확장을 붙인다. 사설 확장 하위 태그는 위키미디어 코드에서 하이픈을 뺀 것이다(8자를 넘는 `zh-classical`만 `zhclass`).
+- **`eml`:** 에밀리아·로마냐어 전체를 뜻한다. ISO 639-3이 2009년에 `egl`(에밀리아어)·`rgn`(로마냐어)로 나누며 폐지했고, IANA 레지스트리에는 처음부터 없다. 에밀리아어 `egl`로 옮기면 뜻이 좁아지므로, 둘을 함께 덮는 등록된 가장 좁은 언어 하위 태그인 로망스어군 `roa`에 `x-eml`을 붙인다.
+- 사설 확장(`x-`)의 뜻: `x-formal` 존댓말(격식체), `x-informal` 반말(비격식체), `x-bms` 자바어 반유마스 방언, `x-tara` 나폴리어 타란토 방언, `x-eml` 에밀리아·로마냐어. `x-srel`·`x-batsmg`·`x-fiuvro`·`x-cbkzam`·`x-roarup`·`x-zhclass`는 "그 위키미디어 코드로 적힌 텍스트"라는 뜻이다(언어는 `x` 앞 tag와 같다).
 - 표에 없고 BCP 47 형식도 아닌 코드(빈 언어 등)는 레이블·설명·별칭이면 건너뛰고(보고서 `skipped`), monolingualtext면 원문 UTF8-TEXT로 보존한다(보고서 `raw`).
+
+### 역대응: BCP 47 tag → 위키미디어 코드
+
+역대응은 유일하다(`port.wikimediaCode`). tag가 위 표의 BCP 47 열에 있으면(대소문자 무시) 그 행의 위키미디어 코드이고, 없으면 tag 자체가 위키미디어 코드다. 위 표는 위키데이터가 받는 모든 코드(용어 언어와 monolingualtext 언어 합집합 1,488개, 2026-10-29 `wbcontentlanguages`) 위에서 일대일이고, 표의 BCP 47 열 tag는 어느 것도 위키데이터 코드가 아니다. 그래서 어떤 코드든 tag로 옮겼다가 되돌리면 원래 코드가 나온다. 이 목록은 `testdata/wikidata-languages.txt`에 두고 `TestWikimediaLanguageInjective`가 검사한다. 위키데이터가 새 코드를 받으면 목록을 갱신하고 다시 검사한다.
+
+| BCP 47 | 위키미디어 | | BCP 47 | 위키미디어 |
+|---|---|---|---|---|
+| `sr-Latn-x-srel` | `sr-el` | | `lzh-x-zhclass` | `zh-classical` |
+| `sgs-x-batsmg` | `bat-smg` | | `jv-x-bms` | `map-bms` |
+| `vro-x-fiuvro` | `fiu-vro` | | `nap-x-tara` | `roa-tara` |
+| `cbk-x-cbkzam` | `cbk-zam` | | `de-x-formal` | `de-formal` |
+| `en-simple` | `simple` | | `es-x-formal` | `es-formal` |
+| `roa-x-eml` | `eml` | | `hu-x-formal` | `hu-formal` |
+| `rup-x-roarup` | `roa-rup` | | `nl-x-informal` | `nl-informal` |
+| 그 밖의 tag | tag 그대로 | | | |
 
 ## 속성 데이터 타입
 

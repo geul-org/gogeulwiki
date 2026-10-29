@@ -6,8 +6,9 @@ import "testing"
 
 func TestWikimediaLanguage(t *testing.T) {
 	for in, want := range map[string]string{
-		"sr-el": "sr-Latn", "simple": "en-simple", "zh-classical": "lzh", "map-bms": "jv-x-bms", "DE-Formal": "de-x-formal",
-		"de": "de", "zh-Hant": "zh-Hant", "": "",
+		"sr-el": "sr-Latn-x-srel", "simple": "en-simple", "zh-classical": "lzh-x-zhclass", "map-bms": "jv-x-bms",
+		"DE-Formal": "de-x-formal", "eml": "roa-x-eml", "roa-rup": "rup-x-roarup", "bat-smg": "sgs-x-batsmg",
+		"de": "de", "zh-Hant": "zh-Hant", "": "", "egl": "egl", "rup": "rup", "lzh": "lzh", "sgs": "sgs", "sr-latn": "sr-latn",
 	} {
 		if got := wikimediaLanguage(in); got != want {
 			t.Fatalf("%q: %q want %q", in, got, want)

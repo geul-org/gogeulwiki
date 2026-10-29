@@ -17,7 +17,7 @@ func TestLanguageText(t *testing.T) {
 	}
 	r, _ = languageText("sr-el", "Beograd")
 	lang, _, err := core.DecodeLanguageText(r)
-	if b, _ := core.DecodeBytesValue(lang, core.CodecLanguageBCP47Even); err != nil || string(b) != "sr-Latn" {
+	if b, _ := core.DecodeBytesValue(lang, core.CodecLanguageBCP47Even); err != nil || string(b) != "sr-Latn-x-srel" {
 		t.Fatalf("sr-el: %q %v", b, err)
 	}
 	if _, ok := languageText("zh-Hant", "x"); !ok {
