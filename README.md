@@ -49,8 +49,13 @@ The database connection comes from `-dsn` or, when it is empty, from the standar
 | `-resume` | Pack mode: continue the interrupted run from its last checkpoint | off |
 | `-recorded-at` | Pack mode: RECORDED-AT of every version list (Unix seconds) | the run's start |
 | `-samples` | Pack mode: Q documents the zstd dictionary is trained on | `2048` |
+| `-strict` | Pack mode: stop at the first anomaly (see below) after a checkpoint, exit code 3 | off |
+| `-anomaly` | Pack mode, `-strict`: anomaly report path (TSV) | `wikigeul-anomaly.tsv` |
+| `-allow` | Pack mode, `-strict`: also treat `kind:reason` as normal (`skipped:…`, `raw:…`, `warn:<rule>`); repeatable, not part of the run's identity | none |
 | `-langreg-root` | Archive to read the GEUL Language Registry (spec document `0x0000/0x0000000000000848`) from | `-root` |
 | `-langreg-version` | Version of that spec document to use | `0`: the newest when the run starts |
+
+Strict mode (`-strict`): a run over all of Wikidata must not silently drop what it has never seen. Before a result is written, the writer looks for anomalies: a failed conversion or a panic, an entity the dump lists but cannot load, a skipped value other than a Lexeme (`L…`, forms, senses) or EntitySchema (`E…`) value, a value kept as original text for a reason not met in the validated runs (coordinate precision; time with timezone or bounds; time precision 0–5, millennium, century, Julian decade; BCE or 5+ digit decade; Y-prefixed year; day-precision date that is no day), a reference mismatch, and any `schema.Check` Fact on the document or its version list other than Warn E6. At the first anomalous entity it checkpoints everything before it, writes the anomaly report (`id`, `kind`, `property`, `value` (original, quoted), `reason`, `class`: 문법 부족 / 변환기 미지원 / 데이터 이상 / 기타) and exits 3. `-resume` starts again at that entity: add `-allow kind:reason` if the case is accepted as normal; if the porter must change, its commit changes and the run starts over. A panic is recovered into an error in every mode. After every checkpoint the run prints `progress <time> last=… docs=… session_docs=… rate=… skipped={…} raw={…}`.
 
 Language codes: each Wikimedia language code is mapped to a BCP 47 tag; when the GEUL Language Registry numbers the tag (compared without case) the text's language is written as a 1-WORD LANGUAGE-SHORT-CODE, otherwise as a LANGUAGE-BCP47-CODE in canonical case. The registry is not built into the code: it is read once per run from the spec document's ENUMs through the gogeul resolve path, and the version used (`0x0000/0x0000000000000848@n` and its content hash) is printed and recorded in the report's first line.
 

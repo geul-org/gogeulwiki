@@ -25,7 +25,7 @@ func TestDatatypeEdges(t *testing.T) {
 	if rs := datatypeEdges(ids, subject, "", &rep); rs != nil || ids.Next() != 7 {
 		t.Fatal("item: want none")
 	}
-	if rs := datatypeEdges(ids, subject, "nope", &rep); rs != nil || rep.Skipped["데이터 타입: nope"] != 1 {
+	if rs := datatypeEdges(ids, subject, "nope", &rep); rs != nil || rep.Skipped["데이터 타입: nope"] != 1 || rep.Notes[len(rep.Notes)-1] != (Note{Kind: "skipped", Reason: "데이터 타입: nope", Property: "datatype", Value: "nope"}) {
 		t.Fatal("unknown: want skipped")
 	}
 }

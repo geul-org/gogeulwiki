@@ -26,11 +26,11 @@ func qualifierEdges(a IDs, target uint64, qs []source.Qualifier, langs Languages
 			reason = "속성 ID: " + q.Property
 		}
 		if reason != "" {
-			rep.Skipped["qualifier "+reason]++
+			noteSkip(rep, "qualifier "+reason, q.Property, q.Value)
 			continue
 		}
 		if raw != "" {
-			rep.Raw["qualifier "+raw]++
+			noteRaw(rep, "qualifier "+raw, q.Property, q.Value)
 		}
 		rep.Properties = append(rep.Properties, propertiesOf(c)...)
 		countMarker(rep, "qualifier ", value)

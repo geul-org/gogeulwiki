@@ -21,7 +21,7 @@ func datatypeEdges(a IDs, subject core.Record, datatype string, rep *Report) []c
 	case datatype == "":
 		return nil
 	case !ok:
-		rep.Skipped["데이터 타입: "+datatype]++
+		noteSkip(rep, "데이터 타입: "+datatype, "datatype", datatype)
 		return nil
 	}
 	property := uri(wikibaseOntology + "propertyType")

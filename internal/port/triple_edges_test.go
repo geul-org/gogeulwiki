@@ -31,6 +31,9 @@ func TestTripleEdges(t *testing.T) {
 	if rep.Skipped["속성 ID: X1"] != 1 || rep.Skipped["형식 미지원: unknown"] != 1 || rep.Skipped["rank: odd"] != 1 {
 		t.Fatalf("skipped %v", rep.Skipped)
 	}
+	if len(rep.Notes) != 5 || rep.Notes[0] != (Note{Kind: "raw", Reason: "qualifier time: JSON 아님", Property: "P580", Value: "x"}) || rep.Notes[1] != (Note{Kind: "skipped", Reason: "속성 ID: X1", Property: "X1", Value: "a"}) || rep.Notes[4] != (Note{Kind: "raw", Reason: "time: JSON 아님", Property: "P585", Value: "x"}) {
+		t.Fatalf("notes %+v", rep.Notes)
+	}
 	if !slices.Equal(rep.Properties, []string{"P31", "P580", "P1659", "P279", "P585", "P40", "P582"}) {
 		t.Fatalf("properties %v", rep.Properties)
 	}

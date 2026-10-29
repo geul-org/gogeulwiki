@@ -13,7 +13,7 @@ import (
 func TestNewPackWriter(t *testing.T) {
 	c := config{Report: filepath.Join(t.TempDir(), "r.tsv"), Every: 3}
 	w, err := newPackWriter(packTestStream(t), c, packProgress{})
-	if err != nil || w.every != 3 {
+	if err != nil || w.every != 3 || w.strict || len(w.allow) != 0 || w.skipped == nil || w.raw == nil || w.start.IsZero() || !strings.HasPrefix(w.run, "# wikigeul") {
 		t.Fatal(err)
 	}
 	w.w.Flush()
@@ -22,7 +22,8 @@ func TestNewPackWriter(t *testing.T) {
 		t.Fatalf("%q %d", b, w.prog.Report)
 	}
 	os.WriteFile(c.Report, []byte("0123456789"), 0o644)
-	if _, err := newPackWriter(packTestStream(t), c, packProgress{Docs: 1, Kind: 'Q', Report: 4}); err != nil {
+	c.Strict, c.Anomaly, c.Allow = true, "a.tsv", []string{"warn:E7"}
+	if w, err := newPackWriter(packTestStream(t), c, packProgress{Docs: 1, Kind: 'Q', Report: 4}); err != nil || !w.strict || w.anomaly != "a.tsv" || !w.allow["warn:E7"] || w.docs0 != 1 {
 		t.Fatal(err)
 	}
 	if b, _ := os.ReadFile(c.Report); string(b) != "0123" {

@@ -17,7 +17,9 @@ package port
 // per document), the TRIPLEs and REFERENCE-NODEs describing those LOCALs
 // (OriginEdges), the QUALIFIERs on SOURCE Edges (SourceQuals) and the
 // TRIPLEs whose references do not read back from the document as the same
-// snak sets (RefMismatch, referenceSnaks; 0 when lossless).
+// snak sets (RefMismatch, referenceSnaks; 0 when lossless). Notes holds one
+// Note per Skipped and Raw count, in document order, naming the property and
+// the original value (noteSkip, noteRaw).
 type Report struct {
 	ID           string
 	Missing      bool
@@ -39,4 +41,5 @@ type Report struct {
 	OriginEdges  int
 	SourceQuals  int
 	RefMismatch  int
+	Notes        []Note
 }

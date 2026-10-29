@@ -26,6 +26,9 @@ func TestQualifierEdges(t *testing.T) {
 	if rep.Skipped["qualifier 속성 ID: X1"] != 1 || rep.Skipped["qualifier 형식 미지원: unknown"] != 1 || rep.Raw["qualifier time: JSON 아님"] != 1 {
 		t.Fatalf("counts %v %v", rep.Skipped, rep.Raw)
 	}
+	if len(rep.Notes) != 3 || rep.Notes[0] != (Note{Kind: "skipped", Reason: "qualifier 속성 ID: X1", Property: "X1", Value: "a"}) || rep.Notes[2] != (Note{Kind: "raw", Reason: "qualifier time: JSON 아님", Property: "P585", Value: "x"}) {
+		t.Fatalf("notes %+v", rep.Notes)
+	}
 	if !slices.Equal(rep.Properties, []string{"P580", "P512", "P585", "P642", "P31"}) {
 		t.Fatalf("properties %v", rep.Properties)
 	}

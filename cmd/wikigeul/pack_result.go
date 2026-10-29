@@ -10,7 +10,9 @@ import (
 
 // packResult is job's output: the document ID, its version list (slot 0) and
 // version 1 encoded for the stream, the raw document (for the TRANSFORMED-BY
-// check), the report; Missing when the dump lost the entity, Err on failure.
+// check), the report; Missing when the dump lost the entity, Err on failure
+// (a panic included); Facts, in a strict run, the schema.Check findings on
+// both records (checkFacts).
 type packResult struct {
 	Job     packJob
 	Doc     uint64
@@ -20,4 +22,5 @@ type packResult struct {
 	Rep     port.Report
 	Missing bool
 	Err     error
+	Facts   []checkFact
 }

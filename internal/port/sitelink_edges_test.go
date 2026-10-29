@@ -28,6 +28,9 @@ func TestSitelinkEdges(t *testing.T) {
 	if !slices.Equal(codecs, want) || rep.Sitelinks != 2 || rep.Badges != 1 || rep.Skipped["sitelink 사이트: xxsite"] != 1 {
 		t.Fatalf("codecs %02X rep %+v", codecs, rep)
 	}
+	if len(rep.Notes) != 1 || rep.Notes[0] != (Note{Kind: "skipped", Reason: "sitelink 사이트: xxsite", Property: "sitelink", Value: "xxsite x"}) {
+		t.Fatalf("notes %+v", rep.Notes)
+	}
 	// #1 binds LOCAL 2 to schema:about, #3 binds LOCAL 4 to the enwiki page, #5 is TRIPLE(2, 4, Q42).
 	if obj, _, err := core.DecodeRecord(rs[0].Payload[4:]); err != nil {
 		t.Fatal(err)

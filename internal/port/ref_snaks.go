@@ -19,11 +19,11 @@ func refSnaks(r source.Reference, langs Languages, rep *Report) []refSnak {
 			reason = "속성 ID: " + q.Property
 		}
 		if reason != "" {
-			rep.Skipped["reference "+reason]++
+			noteSkip(rep, "reference "+reason, q.Property, q.Value)
 			continue
 		}
 		if raw != "" {
-			rep.Raw["reference "+raw]++
+			noteRaw(rep, "reference "+raw, q.Property, q.Value)
 		}
 		rep.Properties = append(rep.Properties, propertiesOf(c)...)
 		countMarker(rep, "reference ", value)

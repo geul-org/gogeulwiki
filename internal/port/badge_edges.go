@@ -15,7 +15,7 @@ func badgeEdges(a IDs, page uint64, badges []string, pred *uint64, rep *Report) 
 	for _, b := range badges {
 		item, ok := entityRef(b)
 		if !ok || b[0] != 'Q' {
-			rep.Skipped["sitelink badge: "+b]++
+			noteSkip(rep, "sitelink badge: "+b, "badge", b)
 			continue
 		}
 		if *pred == 0 {

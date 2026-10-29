@@ -25,6 +25,9 @@ func TestRefSnaks(t *testing.T) {
 	if rep.Skipped["reference 속성 ID: X1"] != 1 || rep.Skipped["reference 형식 미지원: unknown"] != 1 || rep.Raw["reference time: JSON 아님"] != 1 || rep.Markers["reference UNKNOWN-VALUE"] != 1 {
 		t.Fatalf("%+v", rep)
 	}
+	if len(rep.Notes) != 3 || rep.Notes[1] != (Note{Kind: "skipped", Reason: "reference 형식 미지원: unknown", Property: "P2", Value: "{}"}) || rep.Notes[2].Kind != "raw" || rep.Notes[2].Property != "P813" {
+		t.Fatalf("notes %+v", rep.Notes)
+	}
 	if !slices.Equal(rep.Properties, []string{"P248", "Q36578", "P813", "P50"}) && !slices.Equal(rep.Properties, []string{"P248", "P813", "P50"}) {
 		t.Fatalf("properties %v", rep.Properties)
 	}

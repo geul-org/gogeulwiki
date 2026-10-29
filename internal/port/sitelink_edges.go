@@ -21,7 +21,7 @@ func sitelinkEdges(a IDs, subject core.Record, links []source.Sitelink, rep *Rep
 	for _, l := range links {
 		page, ok := sitelinkURI(l)
 		if !ok {
-			rep.Skipped["sitelink 사이트: "+l.Site]++
+			noteSkip(rep, "sitelink 사이트: "+l.Site, "sitelink", l.Site+" "+l.Title)
 			continue
 		}
 		if about == 0 {

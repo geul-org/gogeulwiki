@@ -21,7 +21,12 @@ import "github.com/geul-org/wikigeul/internal/port"
 // or else every property and Q<From>…Q<To>, checkpoints every Every
 // documents, Resume continues an interrupted run, RecordedAt is the
 // RECORDED-AT of every version list (0: the run's start) and Samples how many
-// documents train the zstd dictionary.
+// documents train the zstd dictionary. Strict (pack mode) stops the run at
+// the first anomaly (anomaliesOf: a skip or raw-kept value outside the
+// normal list, a failed conversion or panic, a missing entity, a reference
+// mismatch, a schema Fact other than the known Warn E6), after a checkpoint,
+// writing the anomaly report Anomaly; Allow adds "kind:reason" entries
+// ("raw:time: 0년", "warn:E7") to the normal list for a resumed run.
 type config struct {
 	Root       string
 	From       uint64
@@ -44,4 +49,7 @@ type config struct {
 	Resume     bool
 	RecordedAt int64
 	Samples    int
+	Strict     bool
+	Anomaly    string
+	Allow      []string
 }

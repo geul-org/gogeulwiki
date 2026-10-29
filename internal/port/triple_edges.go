@@ -29,11 +29,11 @@ func tripleEdges(a IDs, subject core.Record, claims []source.Claim, st *sourcing
 			reason = "rank: " + c.Rank
 		}
 		if reason != "" {
-			rep.Skipped[reason]++
+			noteSkip(rep, reason, c.Property, c.Value)
 			continue
 		}
 		if raw != "" {
-			rep.Raw[raw]++
+			noteRaw(rep, raw, c.Property, c.Value)
 		}
 		rep.Properties = append(rep.Properties, propertiesOf(c)...)
 		countMarker(rep, "", obj)
