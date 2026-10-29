@@ -1,5 +1,5 @@
 //ff:func feature=cli type=command control=iteration dimension=1
-//ff:what TestRun — a small range writes both Issuers' documents, indexes and the report; bad flags, an unwritable root and unwritable Issuer directories fail
+//ff:what TestRun — a small range writes both Issuers' documents, indexes and the report; bad flags, an unparsable DSN, an unwritable root and unwritable Issuer directories fail
 package main
 
 import (
@@ -33,6 +33,9 @@ func TestRun(t *testing.T) {
 	}
 	if err := run([]string{"-root", root, "-dsn", "host=/nonexistent", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
 		t.Fatal("unreachable database: want error")
+	}
+	if err := run([]string{"-root", root, "-dsn", "host='x", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
+		t.Fatal("unparsable DSN: want error")
 	}
 	blocked := filepath.Join(root, "blocked")
 	os.WriteFile(blocked, nil, 0o644)

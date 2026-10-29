@@ -9,25 +9,29 @@ import (
 	"github.com/geul-org/gogeul/pkg/core"
 	"github.com/geul-org/gogeul/pkg/resolve"
 	"github.com/geul-org/gogeulwiki/internal/source"
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 // run reads the loaded dump's provenance (source.LoadDump, provenanceOf) and
 // ports Q<from>…Q<to>, then every property those documents use, all under
 // the one Issuer wikidata.geul.org (0x00010000; document IDs by
 // port.DocNumber), writes its documents.geul and, when asked, the report.
-// It keeps one connection with JIT off: the planner overestimates the
+// A DSN lib/pq cannot parse fails before any work (pq.NewConnector). It
+// keeps one connection with JIT off: the planner overestimates the
 // reference join (statement_reference ⋈ reference_snak) and JIT-compiles it,
-// about 160 ms per entity against 0.5 ms without (2026-10-27).
+// about 160 ms per entity against 0.5 ms without (2026-10-27). When the
+// schema has reference_snak_order (source.Dump.RefOrder) every reference
+// occurrence keeps its own snak order; the run says which on stdout.
 func run(args []string) error {
 	c, err := parseFlags(args)
 	if err != nil {
 		return err
 	}
-	db, err := sql.Open("postgres", c.DSN)
+	conn, err := pq.NewConnector(c.DSN)
 	if err != nil {
 		return err
 	}
+	db := sql.OpenDB(conn)
 	defer db.Close()
 	db.SetMaxOpenConns(1)
 	db.Exec("SET jit = off") // speed only: an error leaves JIT on
@@ -35,6 +39,8 @@ func run(args []string) error {
 	if err != nil {
 		return fmt.Errorf("dump %s/%d: %w", c.Schema, c.Dump, err)
 	}
+	c.RefOrder = d.RefOrder
+	fmt.Printf("reference snak order: per occurrence (reference_snak_order) %v\n", c.RefOrder)
 	prov, err := provenanceOf(d, c.Commit, c.LibCommit)
 	if err != nil {
 		return err

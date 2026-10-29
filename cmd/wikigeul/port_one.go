@@ -12,14 +12,15 @@ import (
 	"github.com/geul-org/gogeulwiki/internal/source"
 )
 
-// portOne ports entity id: loads it from c's dump (source.LoadEntity), builds
+// portOne ports entity id: loads it from c's dump (source.LoadEntity, each
+// reference occurrence in its own snak order when c.RefOrder), builds
 // its document under issuer with prov and the LOCAL IDs carried over from
 // its published version (carriedIDs, port.BuildDoc) and stores it in dir as version 1 over any
 // earlier one (resolve.Dir.Overwrite: development, no version per run). It is
 // false when the entity is not in the dump, and its report then says so
 // (Missing).
 func portOne(db *sql.DB, dir resolve.Dir, id string, issuer []core.Word, c config, prov port.Provenance) (port.Report, bool, error) {
-	e, ok, err := source.LoadEntity(db, source.Store{Schema: c.Schema, Dump: c.Dump}, id)
+	e, ok, err := source.LoadEntity(db, source.Store{Schema: c.Schema, Dump: c.Dump, RefOrder: c.RefOrder}, id)
 	if err != nil || !ok {
 		return port.Report{ID: id, Missing: err == nil}, false, err
 	}
