@@ -15,7 +15,8 @@ import (
 // portOne ports entity id: loads it from c's dump (source.LoadEntity, each
 // reference occurrence in its own snak order when c.RefOrder), builds
 // its document under issuer with prov and the LOCAL IDs carried over from
-// its published version (carriedIDs, port.BuildDoc) and stores it in dir as version 1 over any
+// its published version (carriedIDs, port.BuildDoc, languages by the run's
+// registry c.Langs) and stores it in dir as version 1 over any
 // earlier one (resolve.Dir.Overwrite: development, no version per run). It is
 // false when the entity is not in the dump, and its report then says so
 // (Missing).
@@ -28,7 +29,7 @@ func portOne(db *sql.DB, dir resolve.Dir, id string, issuer []core.Word, c confi
 	if err != nil {
 		return port.Report{ID: id}, false, err
 	}
-	b, rep, err := port.BuildDoc(e, issuer, prov, ids)
+	b, rep, err := port.BuildDoc(e, issuer, prov, ids, c.Langs)
 	if err != nil {
 		return rep, false, err
 	}

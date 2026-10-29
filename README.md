@@ -15,6 +15,7 @@ go install github.com/geul-org/wikigeul/cmd/wikigeul@latest
 - Go 1.25 or later.
 - PostgreSQL holding a Wikidata dump loaded by [wikipg](https://github.com/geul-org/wikipg). wikigeul refuses a dump loaded by any other tool, because only wikipg's store is known to be lossless.
 - The full git commit IDs of this tool and of the [gogeul](https://github.com/geul-org/gogeul) library it was built with; they are recorded in every document.
+- An archive holding the LANGUAGE-SHORT-CODE codec spec document `0x0000/0x0000000000000848` (the GEUL Language Registry), by default `-root` itself.
 
 ## Usage
 
@@ -39,8 +40,12 @@ The database connection comes from `-dsn` or, when it is empty, from the standar
 | `-schema` | Schema of the loaded dump (wikipg `-schema`) | `wikidata` |
 | `-dump-id` | Which loaded dump to read (wikipg `-dump-id`, 1–255) | `1` |
 | `-report` | Write a per-entity TSV report to this path | none |
+| `-langreg-root` | Archive to read the GEUL Language Registry (spec document `0x0000/0x0000000000000848`) from | `-root` |
+| `-langreg-version` | Version of that spec document to use | `0`: the newest when the run starts |
 
-The report starts with a comment line recording the run (`# wikigeul -from … -to … -schema … -dump-id … -commit … -lib-commit …`), then a header and one line per ID in the range. `status` is `ok` (document written) or `missing` (no such entity in the dump). The other columns count what was written and what was skipped: `labels`, `descriptions`, `aliases`, `triples`, `qualifiers`, `sitelinks`, `badges`, `skipped`, `raw` (values kept as original text), `markers` (unknown/no-value markers), and the reference columns `sources`, `origin_qid`, `origin_absent`, `origin_local`, `origin_edges`, `source_qualifiers`, `ref_mismatch` (must be 0).
+Language codes: each Wikimedia language code is mapped to a BCP 47 tag; when the GEUL Language Registry numbers the tag (compared without case) the text's language is written as a 1-WORD LANGUAGE-SHORT-CODE, otherwise as a LANGUAGE-BCP47-CODE in canonical case. The registry is not built into the code: it is read once per run from the spec document's ENUMs through the gogeul resolve path, and the version used (`0x0000/0x0000000000000848@n` and its content hash) is printed and recorded in the report's first line.
+
+The report starts with a comment line recording the run (`# wikigeul -from … -to … -schema … -dump-id … -commit … -lib-commit … -langreg 0x0000/0x0000000000000848@n 0x<hash>`), then a header and one line per ID in the range. `status` is `ok` (document written) or `missing` (no such entity in the dump). The other columns count what was written and what was skipped: `labels`, `descriptions`, `aliases`, `triples`, `qualifiers`, `sitelinks`, `badges`, `skipped`, `raw` (values kept as original text), `markers` (unknown/no-value markers), and the reference columns `sources`, `origin_qid`, `origin_absent`, `origin_local`, `origin_edges`, `source_qualifiers`, `ref_mismatch` (must be 0).
 
 Each run overwrites version 1 of each document; when the content is unchanged no file is touched. Edge IDs are carried over from the previously published version, so unchanged statements keep their numbers.
 

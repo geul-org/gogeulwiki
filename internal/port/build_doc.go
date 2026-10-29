@@ -21,8 +21,11 @@ import (
 // take the next (OVERVIEW 개정, delta.LocalIDs). The document ID is the
 // DocNumber of e's ID (its letter and number). The report counts what was
 // written and skipped, and the TRIPLEs whose references do not read back
-// from the body as the same snak sets (RefMismatch).
-func BuildDoc(e source.Entity, issuer []core.Word, p Provenance, a IDs) ([]byte, Report, error) {
+// from the body as the same snak sets (RefMismatch). Every language text
+// (labels, descriptions, aliases, monolingualtext values) has a
+// LANGUAGE-SHORT-CODE when langs, the GEUL Language Registry, numbers its tag,
+// else a LANGUAGE-BCP47-CODE (languageRecord).
+func BuildDoc(e source.Entity, issuer []core.Word, p Provenance, a IDs, langs Languages) ([]byte, Report, error) {
 	rep := Report{ID: e.ID, Skipped: map[string]int{}, Raw: map[string]int{}, Markers: map[string]int{}}
 	prefix, n, okNum := entityNumber(e.ID)
 	subject, okRef := entityRef(e.ID)
@@ -37,13 +40,13 @@ func BuildDoc(e source.Entity, issuer []core.Word, p Provenance, a IDs) ([]byte,
 	if err != nil {
 		return nil, rep, err
 	}
-	labels := textEdges(edgeLabel, a, subject, e.Labels, &rep)
-	descriptions := textEdges(edgeDescription, a, subject, e.Descriptions, &rep)
-	aliases := textEdges(edgeAlias, a, subject, e.Aliases, &rep)
+	labels := textEdges(edgeLabel, a, subject, e.Labels, langs, &rep)
+	descriptions := textEdges(edgeDescription, a, subject, e.Descriptions, langs, &rep)
+	aliases := textEdges(edgeAlias, a, subject, e.Aliases, langs, &rep)
 	body := append(append(append(decl, labels...), descriptions...), aliases...)
 	body = append(body, datatypeEdges(a, subject, e.Datatype, &rep)...)
 	st := newSourcing()
-	body = append(body, tripleEdges(a, subject, e.Claims, st, &rep)...)
+	body = append(body, tripleEdges(a, subject, e.Claims, st, langs, &rep)...)
 	body = append(body, sitelinkEdges(a, subject, e.Sitelinks, &rep)...)
 	rep.Labels, rep.Descriptions, rep.Aliases = len(labels), len(descriptions), len(aliases)
 	rep.RefMismatch = refMismatch(st.expect, referenceSnaks(body))

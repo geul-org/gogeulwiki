@@ -21,7 +21,7 @@ func TestTripleEdges(t *testing.T) {
 		{Property: "P3", Type: "string", Value: "a", Rank: "odd"},
 		{Property: "P585", Type: "time", Value: "x", Rank: "normal"},
 		{Property: "P40", SnakType: "novalue", Rank: "normal", Qualifiers: []source.Qualifier{{Property: "P582", SnakType: "somevalue"}}},
-	}, newSourcing(), &rep)
+	}, newSourcing(), nil, &rep)
 	if rep.Raw["time: JSON 아님"] != 1 || rep.Raw["qualifier time: JSON 아님"] != 1 || rep.Triples != 4 || rep.Qualifiers != 2 || rep.Markers["NO-VALUE"] != 1 || rep.Markers["qualifier UNKNOWN-VALUE"] != 1 {
 		t.Fatalf("raw %v", rep.Raw)
 	}

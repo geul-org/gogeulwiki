@@ -1,5 +1,5 @@
 //ff:func feature=cli type=command control=iteration dimension=1
-//ff:what TestRun — a small range writes both Issuers' documents, indexes and the report; bad flags, an unparsable DSN, an unwritable root and unwritable Issuer directories fail
+//ff:what TestRun — a small range writes both Issuers' documents, indexes and the report with the language registry read from the root (or -langreg-root); bad flags, no registry, an unparsable DSN, an unwritable root and unwritable Issuer directories fail
 package main
 
 import (
@@ -11,6 +11,7 @@ import (
 func TestRun(t *testing.T) {
 	_, schema := fixtureDB(t)
 	root := t.TempDir()
+	fixtureRegistry(t, root)
 	report := filepath.Join(root, "r.tsv")
 	if err := run([]string{"-root", root, "-from", "1", "-to", "3", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema, "-report", report}); err != nil {
 		t.Fatal(err)
@@ -37,9 +38,12 @@ func TestRun(t *testing.T) {
 	if err := run([]string{"-root", root, "-dsn", "host='x", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
 		t.Fatal("unparsable DSN: want error")
 	}
+	if err := run([]string{"-root", t.TempDir(), "-from", "1", "-to", "1", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
+		t.Fatal("no language registry: want error")
+	}
 	blocked := filepath.Join(root, "blocked")
 	os.WriteFile(blocked, nil, 0o644)
-	if err := run([]string{"-root", blocked, "-from", "1", "-to", "1", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
+	if err := run([]string{"-root", blocked, "-langreg-root", root, "-from", "1", "-to", "1", "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
 		t.Fatal("unwritable: want error")
 	}
 	// A path that is a file: P31's document folder (the property Q1 uses
@@ -53,7 +57,7 @@ func TestRun(t *testing.T) {
 		r := t.TempDir()
 		os.MkdirAll(filepath.Dir(filepath.Join(r, ".well-known/geul", c.file)), 0o755)
 		os.WriteFile(filepath.Join(r, ".well-known/geul", c.file), nil, 0o644)
-		if err := run([]string{"-root", r, "-from", c.from, "-to", c.from, "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
+		if err := run([]string{"-root", r, "-langreg-root", root, "-from", c.from, "-to", c.from, "-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-lib-commit", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "-schema", schema}); err == nil {
 			t.Fatalf("%s file, Q%s: want error", c.file, c.from)
 		}
 	}

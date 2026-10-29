@@ -28,7 +28,7 @@ func TestBuildDocMarkers(t *testing.T) {
 			{Property: "P575", Rank: "normal", SnakType: "somevalue", Qualifiers: []source.Qualifier{{Property: "P3831", Type: "wikibase-entityid", Value: "Q2", SnakType: "value"}}},
 		},
 	}
-	b, rep, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1))
+	b, rep, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1), nil)
 	if err != nil || rep.Triples != 5 || rep.Qualifiers != 5 || len(rep.Skipped) != 0 ||
 		rep.Markers["UNKNOWN-VALUE"] != 1 || rep.Markers["NO-VALUE"] != 2 || rep.Markers["qualifier UNKNOWN-VALUE"] != 1 {
 		t.Fatalf("report %+v %v", rep, err)

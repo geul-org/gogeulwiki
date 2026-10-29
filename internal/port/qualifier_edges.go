@@ -9,18 +9,19 @@ import (
 )
 
 // qualifierEdges builds a QUALIFIER on the Edge target for each qualifier in
-// qs whose property and value convert (qualifierClaim, claimObject),
+// qs whose property and value convert (qualifierClaim, claimObject with the
+// registry langs),
 // numbering Edge Ids from *next and keeping qs order. Skipped qualifiers are
 // counted in rep.Skipped and dates kept as original text in rep.Raw, both
 // prefixed "qualifier "; somevalue and novalue values are written as slot
 // markers and counted in rep.Markers ("qualifier UNKNOWN-VALUE", "qualifier
 // NO-VALUE"); the properties used are added to rep.Properties.
-func qualifierEdges(a IDs, target uint64, qs []source.Qualifier, rep *Report) []core.Record {
+func qualifierEdges(a IDs, target uint64, qs []source.Qualifier, langs Languages, rep *Report) []core.Record {
 	var out []core.Record
 	for _, q := range qs {
 		c := qualifierClaim(q)
 		prop, okProp := entityRef(q.Property)
-		value, reason, raw := claimObject(c)
+		value, reason, raw := claimObject(c, langs)
 		if !okProp {
 			reason = "속성 ID: " + q.Property
 		}

@@ -19,7 +19,7 @@ func TestQualifierEdges(t *testing.T) {
 		{Property: "P1114", Type: "unknown", Value: "{}"},
 		{Property: "P585", Type: "time", Value: "x"},
 		{Property: "P642", Type: "wikibase-entityid", Value: "P31"},
-	}, &rep)
+	}, nil, &rep)
 	if len(rs) != 4 || ids.Next() != 14 || rep.Qualifiers != 4 || rs[0].Payload[1] != 10 || rs[3].Payload[1] != 13 {
 		t.Fatalf("got %d next %d %+v", len(rs), ids.Next(), rep)
 	}

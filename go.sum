@@ -1,7 +1,7 @@
 github.com/cacack/gedcom-go/v3 v3.2.0 h1:maqzijLQW/MxujHqfqdEziNQgJZpd6tcxkujPLFD+dY=
 github.com/cacack/gedcom-go/v3 v3.2.0/go.mod h1:5ekehkreOOKz+SZ/gjcZ3vApMihE6ycHuYMkYNkVYE8=
-github.com/geul-org/gogeul v0.0.0-20261027154458-d281180cc1c4 h1:pJgtf2Azf/xX1E+4CJ8YSK3nTq81DLddglJVgfQ0xP4=
-github.com/geul-org/gogeul v0.0.0-20261027154458-d281180cc1c4/go.mod h1:wU7yDNFgEgD66O+OR7RxBS3txIKx+NF2DDMw8evkKKA=
+github.com/geul-org/gogeul v0.0.0-20261029151216-6b0e5b0f3fd1 h1:D30SUDVZptBjzyQ64dLGn+dKtWuse26rXsUSVV4dGcE=
+github.com/geul-org/gogeul v0.0.0-20261029151216-6b0e5b0f3fd1/go.mod h1:Tk+96pdiRaY3fCBmbDPzHjs467785ed5+C45L3wbyVQ=
 github.com/geul-org/wikipg v0.0.0-20261028033145-a2fa225720c2 h1:nid7Q65kGfUuniLuKmuwLdLRk4/odLyDhUZM4Re+nNk=
 github.com/geul-org/wikipg v0.0.0-20261028033145-a2fa225720c2/go.mod h1:lrfzBEWX2zAxjfL0EYnzMinYkgsRlK7WsH/vvDSPi70=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=

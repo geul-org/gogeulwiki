@@ -1,12 +1,14 @@
 //ff:func feature=port type=helper control=iteration dimension=1
-//ff:what wikimediaCode — the Wikimedia language code a BCP 47 tag came from: the inverse of wikimediaLanguage (docs/conversion.md 언어 코드 대응)
+//ff:what wikimediaCode — the Wikimedia language code a BCP 47 tag came from (any case): the inverse of wikimediaLanguage (docs/conversion.md 언어 코드 대응)
 package port
 
 import "strings"
 
 // wikimediaCode returns the Wikimedia code whose tag (wikimediaBCP47) is tag,
-// compared without case as BCP 47 tags are, or tag unchanged when no code maps
-// to it: such a tag was the Wikimedia code itself. It undoes
+// compared without case as BCP 47 tags are, or tag in lower case when no code
+// maps to it: such a tag was the Wikimedia code itself, and Wikimedia codes
+// are lower case while a document holds the tag in canonical case (a
+// LANGUAGE-SHORT-CODE's registry tag `pt-BR`, a LANGUAGE-BCP47-CODE). It undoes
 // wikimediaLanguage for every code Wikidata accepts because that map is
 // one-to-one and none of its tags is itself a Wikidata code.
 func wikimediaCode(tag string) string {
@@ -15,5 +17,5 @@ func wikimediaCode(tag string) string {
 			return code
 		}
 	}
-	return tag
+	return strings.ToLower(tag)
 }

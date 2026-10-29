@@ -5,16 +5,16 @@ package port
 import "github.com/geul-org/wikigeul/internal/source"
 
 // refSnaks converts each snak of r like a qualifier (qualifierClaim,
-// claimObject; somevalue/novalue become slot markers). A snak whose property
+// claimObject with the registry langs; somevalue/novalue become slot markers). A snak whose property
 // or value does not convert is left out and counted in rep.Skipped, dates
 // kept as original text in rep.Raw and markers in rep.Markers, all prefixed
 // "reference "; the properties used are added to rep.Properties.
-func refSnaks(r source.Reference, rep *Report) []refSnak {
+func refSnaks(r source.Reference, langs Languages, rep *Report) []refSnak {
 	var out []refSnak
 	for _, q := range r.Snaks {
 		c := qualifierClaim(q)
 		prop, okProp := entityRef(q.Property)
-		value, reason, raw := claimObject(c)
+		value, reason, raw := claimObject(c, langs)
 		if !okProp {
 			reason = "속성 ID: " + q.Property
 		}

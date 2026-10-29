@@ -17,13 +17,13 @@ func TestBuildDocCarriesIDs(t *testing.T) {
 		return source.Claim{Property: "P31", Type: "wikibase-entityid", Value: v, Rank: "normal"}
 	}
 	e := source.Entity{ID: "Q42", Labels: []source.Text{{Lang: "en", Value: "Douglas Adams"}}, Claims: []source.Claim{claim("Q5"), claim("Q36180")}}
-	v1, _, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1))
+	v1, _, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	e.Claims[1] = claim("Q482980")
 	ids, _ := delta.NewLocalIDs(v1, 0)
-	v2, _, err := BuildDoc(e, []core.Word{1, 0}, prov(), ids)
+	v2, _, err := BuildDoc(e, []core.Word{1, 0}, prov(), ids, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

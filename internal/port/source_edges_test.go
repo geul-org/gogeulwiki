@@ -13,7 +13,7 @@ func TestSourceEdges(t *testing.T) {
 	rep := Report{Skipped: map[string]int{}, Raw: map[string]int{}}
 	st := newSourcing()
 	refs := q42Refs()
-	rs := sourceEdges(freshIDs(10), 2, []source.Reference{refs[3], refs[0]}, st, &rep)
+	rs := sourceEdges(freshIDs(10), 2, []source.Reference{refs[3], refs[0]}, st, nil, &rep)
 	codecs := []uint8{}
 	for _, r := range rs {
 		codecs = append(codecs, r.Codec)

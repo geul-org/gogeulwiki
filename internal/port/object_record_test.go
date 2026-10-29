@@ -13,7 +13,7 @@ import (
 
 func TestObjectRecord(t *testing.T) {
 	enc := func(c source.Claim) []core.Word {
-		r, reason := objectRecord(c)
+		r, reason := objectRecord(c, nil)
 		if reason != "" {
 			t.Fatalf("%+v: %q", c, reason)
 		}
@@ -55,7 +55,7 @@ func TestObjectRecord(t *testing.T) {
 		"monolingualtext: 언어 코드 x y": {Type: "monolingualtext", Value: `{"text":"a","language":"x y"}`},
 		"time: JSON 아님":              {Type: "time", Value: "x"},
 	} {
-		if _, got := objectRecord(c); got != want {
+		if _, got := objectRecord(c, nil); got != want {
 			t.Fatalf("%+v: %q want %q", c, got, want)
 		}
 	}

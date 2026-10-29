@@ -14,7 +14,7 @@ func TestTextEdges(t *testing.T) {
 	subj, _ := entityRef("Q1")
 	ids := freshIDs(4)
 	rep := Report{Skipped: map[string]int{}}
-	rs := textEdges(edgeAlias, ids, subj, []source.Text{{Lang: "en", Value: "a"}, {Lang: "x y", Value: "c"}, {Lang: "ko", Value: "b"}}, &rep)
+	rs := textEdges(edgeAlias, ids, subj, []source.Text{{Lang: "en", Value: "a"}, {Lang: "x y", Value: "c"}, {Lang: "ko", Value: "b"}}, nil, &rep)
 	if len(rs) != 2 || ids.Next() != 6 || rs[1].Codec != edgeAlias || rs[1].Payload[1] != core.Word(5) || rep.Skipped["언어 코드: x y"] != 1 {
 		t.Fatalf("got %d next %d %+v %v", len(rs), ids.Next(), rs, rep.Skipped)
 	}

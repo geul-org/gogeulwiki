@@ -9,7 +9,7 @@ import (
 )
 
 func TestMonolingualRecord(t *testing.T) {
-	r, reason := monolingualRecord(`{"text":"Bundesrepublik Deutschland","language":"de"}`)
+	r, reason := monolingualRecord(`{"text":"Bundesrepublik Deutschland","language":"de"}`, nil)
 	lang, text, err := core.DecodeLanguageText(r)
 	if reason != "" || err != nil || string(text) != "Bundesrepublik Deutschland" || lang.Payload[0] != 0x6465 {
 		t.Fatalf("%q %v", reason, err)
@@ -18,7 +18,7 @@ func TestMonolingualRecord(t *testing.T) {
 		"monolingualtext: JSON 아님":   "{",
 		"monolingualtext: 언어 코드 x y": `{"text":"a","language":"x y"}`,
 	} {
-		if _, got := monolingualRecord(v); got != want {
+		if _, got := monolingualRecord(v, nil); got != want {
 			t.Fatalf("%q: %q", v, got)
 		}
 	}

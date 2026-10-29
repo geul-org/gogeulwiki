@@ -10,7 +10,7 @@ func TestWikimediaCode(t *testing.T) {
 		"cbk-x-cbkzam": "cbk-zam", "en-simple": "simple", "roa-x-eml": "eml", "rup-x-roarup": "roa-rup",
 		"lzh-x-zhclass": "zh-classical", "jv-x-bms": "map-bms", "nap-x-tara": "roa-tara", "de-x-formal": "de-formal",
 		"es-x-formal": "es-formal", "hu-x-formal": "hu-formal", "nl-x-informal": "nl-informal",
-		"sgs": "sgs", "sr-latn": "sr-latn", "egl": "egl", "lzh": "lzh", "de": "de", "": "",
+		"sgs": "sgs", "sr-latn": "sr-latn", "sr-Latn": "sr-latn", "pt-BR": "pt-br", "zh-Hans": "zh-hans", "EN-SIMPLE": "simple", "en-UK": "en-uk", "egl": "egl", "lzh": "lzh", "de": "de", "": "",
 	} {
 		if got := wikimediaCode(in); got != want {
 			t.Fatalf("%q: %q want %q", in, got, want)

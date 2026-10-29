@@ -18,7 +18,7 @@ func TestRefSnaks(t *testing.T) {
 		{Property: "P2", Type: "unknown", Value: "{}", SnakType: "value"},
 		{Property: "P813", Type: "time", Value: "x", SnakType: "value"},
 		{Property: "P50", SnakType: "somevalue"},
-	}}, &rep)
+	}}, nil, &rep)
 	if len(got) != 3 || got[0].Property != "P248" || got[1].Property != "P813" || !core.IsSlotMarker(got[2].Value) {
 		t.Fatalf("%+v", got)
 	}

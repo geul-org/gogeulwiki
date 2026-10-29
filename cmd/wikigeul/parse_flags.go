@@ -27,6 +27,9 @@ func parseFlags(args []string) (config, error) {
 	fs.StringVar(&c.Commit, "commit", "", "porter git commit, full ID (required)")
 	fs.StringVar(&c.LibCommit, "lib-commit", "", "GEUL library git commit, full ID (required)")
 	fs.StringVar(&c.Report, "report", "", "report TSV path (empty: none)")
+	fs.StringVar(&c.LangRoot, "langreg-root", "", "archive root to read the LANGUAGE-SHORT-CODE spec (GEUL Language Registry) from (empty: -root)")
+	var langVer uint
+	fs.UintVar(&langVer, "langreg-version", 0, "version of the LANGUAGE-SHORT-CODE spec document to use (0: the newest when the run starts)")
 	if err := fs.Parse(args); err != nil {
 		return config{}, err
 	}
@@ -39,6 +42,13 @@ func parseFlags(args []string) (config, error) {
 		return config{}, errors.New("wikigeul: need 1 <= -dump-id <= 255")
 	}
 	c.Dump = int16(dump)
+	if langVer > 0xFFFFFFFF {
+		return config{}, errors.New("wikigeul: -langreg-version is a 32-bit version ID")
+	}
+	c.LangVer = uint32(langVer)
+	if c.LangRoot == "" {
+		c.LangRoot = c.Root
+	}
 	if c.From == 0 || c.From > c.To {
 		return config{}, errors.New("wikigeul: need 1 <= -from <= -to")
 	}

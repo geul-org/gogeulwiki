@@ -12,14 +12,14 @@ import (
 // (entityRef), a string by its datatype (stringRecord: URI for url and
 // Commons pages, else UTF8-TEXT), a time to GREGORIAN-DATE,
 // EDTF or GEDCOM-DATE (timeRecord), a monolingualtext to UTF8-LANGUAGE-TEXT
-// (monolingualRecord), a globecoordinate to COORDINATE-EARTH or -GEO
+// (monolingualRecord, its language by the registry langs), a globecoordinate to COORDINATE-EARTH or -GEO
 // (coordinateRecord), a quantity to QUANTITY (quantityRecord). A time or coordinate that cannot be converted has a
 // "time: …" or "globecoordinate: …" reason; claimObject keeps it as original
 // text. A somevalue or novalue snak is its slot marker UNKNOWN-VALUE or
 // NO-VALUE (snakMarker); an empty value of a value snak is skipped. Other value
 // types are not converted in this pass (README 작업 범위); the reason
 // names what was skipped.
-func objectRecord(c source.Claim) (core.Record, string) {
+func objectRecord(c source.Claim, langs Languages) (core.Record, string) {
 	if m, ok := snakMarker(c.SnakType); ok {
 		return m, ""
 	}
@@ -37,7 +37,7 @@ func objectRecord(c source.Claim) (core.Record, string) {
 	case "time":
 		return timeRecord(c.Value)
 	case "monolingualtext":
-		return monolingualRecord(c.Value)
+		return monolingualRecord(c.Value, langs)
 	case "globecoordinate", "globe-coordinate":
 		return coordinateRecord(c.Value)
 	case "quantity":

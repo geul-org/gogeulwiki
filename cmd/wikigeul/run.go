@@ -40,6 +40,10 @@ func run(args []string) error {
 		return fmt.Errorf("dump %s/%d: %w", c.Schema, c.Dump, err)
 	}
 	c.RefOrder = d.RefOrder
+	if c.Langs, c.LangDoc, err = languageRegistry(resolve.Dir{Root: c.LangRoot}, c.LangVer); err != nil {
+		return err
+	}
+	fmt.Printf("language registry: %s, %d tags\n", c.LangDoc, len(c.Langs))
 	fmt.Printf("reference snak order: per occurrence (reference_snak_order) %v\n", c.RefOrder)
 	prov, err := provenanceOf(d, c.Commit, c.LibCommit)
 	if err != nil {

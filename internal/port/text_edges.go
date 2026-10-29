@@ -9,12 +9,12 @@ import (
 )
 
 // textEdges builds a LABEL, DESCRIPTION or ALIAS Edge (codec) on subject for each text,
-// numbering Edge Ids from *next. A text whose language code is not a BCP 47
+// numbering Edge Ids from *next, languages by langs (textEdge). A text whose language code is not a BCP 47
 // tag in form is counted in rep.Skipped and gets no Edge.
-func textEdges(codec uint8, a IDs, subject core.Record, texts []source.Text, rep *Report) []core.Record {
+func textEdges(codec uint8, a IDs, subject core.Record, texts []source.Text, langs Languages, rep *Report) []core.Record {
 	var out []core.Record
 	for _, t := range texts {
-		r, ok := textEdge(codec, a, subject, t)
+		r, ok := textEdge(codec, a, subject, t, langs)
 		if !ok {
 			rep.Skipped["언어 코드: "+t.Lang]++
 			continue

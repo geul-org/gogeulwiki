@@ -8,16 +8,17 @@ import (
 )
 
 // sourceEdges writes the references refs of the TRIPLE target in order
-// (README 출처): each reference's snaks are converted (refSnaks) and split
+// (README 출처): each reference's snaks are converted (refSnaks, languages by
+// langs) and split
 // into those describing the source and those describing the citation
 // (splitSnaks); the Origin comes from the first (originOf, declared before
 // the SOURCE when new), the citing snaks become QUALIFIERs on the SOURCE
 // (citeEdges). The converted snak set of each reference is noted in
 // st.expect[target] so BuildDoc can check it reads back (referenceSnaks).
-func sourceEdges(a IDs, target uint64, refs []source.Reference, st *sourcing, rep *Report) []core.Record {
+func sourceEdges(a IDs, target uint64, refs []source.Reference, st *sourcing, langs Languages, rep *Report) []core.Record {
 	var out []core.Record
 	for _, r := range refs {
-		ss := refSnaks(r, rep)
+		ss := refSnaks(r, langs, rep)
 		describe, cite := splitSnaks(ss)
 		origin, decl := originOf(a, describe, st, rep)
 		src, id := sourceEdge(a, target, origin)

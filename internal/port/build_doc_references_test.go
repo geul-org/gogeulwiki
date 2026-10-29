@@ -19,7 +19,7 @@ func TestBuildDocReferences(t *testing.T) {
 		{Property: "P19", Type: "wikibase-entityid", Value: "Q350", Rank: "normal", References: q42Refs()},
 		{Property: "P20", Type: "wikibase-entityid", Value: "Q159288", Rank: "normal", References: q42Refs()[4:6]},
 	}}
-	b, rep, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1))
+	b, rep, err := BuildDoc(e, []core.Word{1, 0}, prov(), freshIDs(1), nil)
 	if err != nil || rep.RefMismatch != 0 || rep.Sources != 10 || rep.OriginQIDs != 1 || rep.OriginNone != 2 || rep.OriginLocals != 5 || rep.OriginEdges != 6+7+2+1+1 || rep.SourceQuals != 11 {
 		t.Fatalf("report %+v %v", rep, err)
 	}
@@ -41,7 +41,7 @@ func TestBuildDocReferences(t *testing.T) {
 		t.Fatalf("Britannica not read back: %v", got[keys[0]])
 	}
 	ids, _ := delta.NewLocalIDs(b, 0)
-	again, rep2, _ := BuildDoc(e, []core.Word{1, 0}, prov(), ids)
+	again, rep2, _ := BuildDoc(e, []core.Word{1, 0}, prov(), ids, nil)
 	if !slices.Equal(again, b) || rep2.RefMismatch != 0 {
 		t.Fatal("rebuild changed the document")
 	}

@@ -4,17 +4,18 @@ package port
 
 // Codes the GEUL library (core) has no constant for: edge/ALIAS,
 // edge/DESCRIPTION, edge/TRIPLE,
-// edge/QUALIFIER, edge/SOURCE, the Meta this porter writes in HEAD (TRANSFORMED-BY) and EXTERNAL-ISSUER-1WORD.
+// edge/QUALIFIER, edge/SOURCE, LANGUAGE-SHORT-CODE, the Meta this porter writes in HEAD (TRANSFORMED-BY) and EXTERNAL-ISSUER-1WORD.
 const (
-	codecURIEven      uint8 = 0x44 // Value URI (even bytes)
-	edgeReferenceNode uint8 = 0x00 // Edge REFERENCE-NODE (edge/REFERENCE-NODE)
-	edgeLabel         uint8 = 0x04 // Edge LABEL
-	edgeAlias         uint8 = 0x05 // Edge ALIAS (edge/ALIAS)
-	edgeDescription   uint8 = 0x06 // Edge DESCRIPTION (edge/DESCRIPTION)
-	edgeTriple        uint8 = 0x0A // Edge TRIPLE (edge/TRIPLE)
-	edgeQualifier     uint8 = 0x0B // Edge QUALIFIER (edge/QUALIFIER)
-	edgeSource        uint8 = 0x20 // Edge SOURCE (edge/SOURCE, 근거)
-	metaTransformedBy uint8 = 0x33 // Meta TRANSFORMED-BY
+	codecURIEven       uint8 = 0x44 // Value URI (even bytes)
+	codecLanguageShort uint8 = 0x48 // Value LANGUAGE-SHORT-CODE (value/text/LANGUAGE-SHORT-CODE)
+	edgeReferenceNode  uint8 = 0x00 // Edge REFERENCE-NODE (edge/REFERENCE-NODE)
+	edgeLabel          uint8 = 0x04 // Edge LABEL
+	edgeAlias          uint8 = 0x05 // Edge ALIAS (edge/ALIAS)
+	edgeDescription    uint8 = 0x06 // Edge DESCRIPTION (edge/DESCRIPTION)
+	edgeTriple         uint8 = 0x0A // Edge TRIPLE (edge/TRIPLE)
+	edgeQualifier      uint8 = 0x0B // Edge QUALIFIER (edge/QUALIFIER)
+	edgeSource         uint8 = 0x20 // Edge SOURCE (edge/SOURCE, 근거)
+	metaTransformedBy  uint8 = 0x33 // Meta TRANSFORMED-BY
 
 	refExternalIssuer1Word uint8 = 0x0C // Reference CCCC EXTERNAL-ISSUER-1WORD (reference/EXTERNAL-ISSUER)
 

@@ -24,7 +24,7 @@
 
 HEAD의 출처 SOURCE와 그 원천 기술(BODY 앞머리), LABEL, DESCRIPTION, ALIAS, (속성이면) 데이터 타입, TRIPLE과 그 QUALIFIER·SOURCE, sitelink 순이다. 출처 기록은 [provenance.md](provenance.md).
 
-- 레이블·설명·별칭은 LABEL·DESCRIPTION·ALIAS(Edge Id, Subject, Object)이고 Object는 UTF8-LANGUAGE-TEXT, 언어는 LANGUAGE-BCP47-CODE다. 빈 설명은 건너뛴다. 언어 코드는 BCP 47 형식만 확인한다(아래 언어 코드 대응).
+- 레이블·설명·별칭은 LABEL·DESCRIPTION·ALIAS(Edge Id, Subject, Object)이고 Object는 UTF8-LANGUAGE-TEXT다. 언어는 GEUL Language Registry에 번호가 있으면 LANGUAGE-SHORT-CODE, 없으면 LANGUAGE-BCP47-CODE다(아래 언어 코드 대응). 빈 설명은 건너뛴다.
 - 클레임은 TRIPLE(Edge Id, Predicate, Subject, Object, Rank)이고, 그 qualifier는 바로 뒤에 QUALIFIER(Edge Id, Property, 대상 TRIPLE의 Edge Id, Value)로 잇는다. qualifier 값은 본 값과 같은 규칙으로 바꾼다. 그 뒤에 출처마다 SOURCE와 그 QUALIFIER가 온다.
 - qualifier 순서는 `qualifier.ordinal`(위키데이터 `qualifiers-order`, 원본 그대로)이다.
 
@@ -48,14 +48,31 @@ Edge Id(LOCAL ID)는 버전을 넘어 유지한다. 다시 생성할 때 직전 
 | time, 그 밖(세기 이상 정밀도, 시간대·오차 범위 등) | datavalue JSON 원문을 UTF8-TEXT로. 날짜는 건너뛰지 않는다 |
 | somevalue (본 값, qualifier) | 자리 표지 UNKNOWN-VALUE `0x0001` (값이 있으나 무엇인지 모른다). rank·qualifier 순서는 그대로 |
 | novalue (본 값, qualifier) | 자리 표지 NO-VALUE `0x0002` (그 qualifier 범위 안에서 값이 없다). 본 값 novalue의 값 qualifier(P580·P582 등)도 함께 옮긴다 |
-| monolingualtext | UTF8-LANGUAGE-TEXT (언어는 LANGUAGE-BCP47-CODE, 아래 언어 코드 대응). 그래도 BCP 47 형식이 아니면(빈 언어) datavalue 원문을 UTF8-TEXT로 |
+| monolingualtext | UTF8-LANGUAGE-TEXT (언어는 LANGUAGE-SHORT-CODE 또는 LANGUAGE-BCP47-CODE, 아래 언어 코드 대응). 그래도 BCP 47 형식이 아니면(빈 언어) datavalue 원문을 UTF8-TEXT로 |
 | globecoordinate | 지구(Q2)는 COORDINATE-EARTH, 다른 천체는 COORDINATE-GEO(천체 = WIKIDATA-QID). precision은 환산 없이 불확도(binary32)와 단위 QID로 옮긴다: 도 Q28390·각분 Q209426·각초 Q829073 순서로, 역변환(`port.precisionText`)이 precision 원문을 바이트 그대로 되돌리는 첫 단위(`port.coordinatePrecision`). precision 없음은 미상(단위 ABSENT). 원문을 되돌리지 못하는 precision·천체 없음·고도 있음·범위 밖은 datavalue 원문을 UTF8-TEXT로 |
 | quantity | QUANTITY(amount·단위·하한·상한). 수와 경계는 자릿수 그대로, 단위 `1`은 무단위(ABSENT 표지), 위키데이터 항목 단위는 WIKIDATA-QID. 그 밖의 단위·형식은 원문 UTF8-TEXT |
 | 그 밖(Lexeme 값 등) | 건너뜀. "옮기지 못함"은 표지로 쓰지 않는다(원천에는 값이 있으므로 UNKNOWN-VALUE가 아니다) |
 
 ## 언어 코드 대응
 
-위키미디어 언어 코드 중 유효한 BCP 47이 아닌 14개는 BCP 47 tag로 옮긴다(`port.wikimediaLanguage`, 대소문자 무시). 나머지 코드는 그대로 쓴다. 근거는 IANA Language Subtag Registry 항목이다(File-Date 2026-09-17, IANA 프로토콜 레지스트리, CC0 1.0: [IANA licensing terms](https://www.iana.org/help/licensing-terms)).
+언어 텍스트(레이블·설명·별칭, monolingualtext 값)의 언어는 다음 순서로 정한다(`port.languageText`).
+
+1. 위키미디어 코드를 아래 대응표로 BCP 47 tag로 옮긴다. 표에 없는 코드는 그대로 tag다.
+2. tag가 GEUL Language Registry에 있으면(대소문자 무시) **LANGUAGE-SHORT-CODE**(1 WORD)로 쓴다.
+3. 없으면 **LANGUAGE-BCP47-CODE**로 쓴다. tag는 정규 대소문자(RFC 5646 2.1.1: script는 첫 글자만 대문자, region은 대문자, 나머지와 singleton 뒤는 소문자)로 적는다(`port.canonicalTag`).
+
+### GEUL Language Registry
+
+- 레지스트리는 공표 아카이브의 LANGUAGE-SHORT-CODE Codec 규격 문서 `0x0000/0x0000000000000848`의 ENUM(코드값)과 BIND(BCP 47 tag)다. wikigeul은 대응표를 코드에 두지 않고, 실행을 시작할 때 GEUL 라이브러리의 resolve 경로로 그 문서의 한 버전을 한 번 읽는다(`languageRegistry`, `codecspec.Spec.Languages`). 한 실행의 모든 문서는 같은 판으로 변환된다.
+- `-langreg-version N`이 읽을 버전을 고정한다. 0(기본)이면 실행 시작 시점의 최신판이다. `-langreg-root`는 규격 문서를 읽을 아카이브다(기본 `-root`).
+- 읽은 판(`0x0000/0x0000000000000848@n`과 내용 해시)은 실행 출력의 `language registry:` 줄과 보고서 첫 줄(`-langreg`)에 남는다. 문서 HEAD에는 적지 않는다. 문법은 코덱북 문서를 IMPORT-DOC으로 가져오지 않고(SPEC-VERSION이 정한다), 레지스트리는 덧붙이기만 하므로 어느 문서의 SHORT-CODE든 그 뒤 모든 판에서 같은 tag로 읽힌다.
+- 판이 바뀌면 결과가 바뀔 수 있다(새로 번호를 받은 tag가 BCP47에서 SHORT-CODE로). 같은 판·같은 덤프·같은 커밋이면 같은 바이트다.
+- 레지스트리 판 v2(IANA File-Date 2026-09-17) 기준으로 위키데이터 코드 1,488개 중 1,472개가 번호를 받는다. 번호가 없는 16개는 아래 사설 확장 13개(`simple`의 `en-simple`은 번호가 있다)와 `be-x-old`, `nl-u-sd-bebru`, `en-uk`다.
+- 알려진 차이(처리 그대로, 레지스트리로 바뀐 것 없음): `en-uk`는 region `UK`가 IANA에 없어 BCP 47로 무효다. 형식은 맞으므로 LANGUAGE-BCP47-CODE `en-UK`로 쓴다(MediaWiki 관례로는 `en-GB`지만 `en-gb`도 위키데이터 코드라 일대일을 지키려면 따로 정해야 한다). `sr-ec`(위키미디어: 세르비아어 키릴 문자, BCP 47: 에콰도르의 세르비아어), `kk-cn`·`kk-tr`·`kk-kz`(위키미디어: 문자 변이, BCP 47: 지역), `als`(위키미디어: 알레만어, IANA: 토스크 알바니아어)는 형식이 유효해 레지스트리 번호를 받지만 BCP 47 뜻은 위키미디어 뜻과 다르다. 이 뜻 차이는 대응표가 풀 문제로 남긴다.
+
+### 위키미디어 코드 → BCP 47 tag
+
+위키미디어 언어 코드 중 유효한 BCP 47이 아닌 14개는 BCP 47 tag로 옮긴다(`port.wikimediaLanguage`, 대소문자 무시). 나머지 코드는 그대로 tag다. 근거는 IANA Language Subtag Registry 항목이다(File-Date 2026-09-17, IANA 프로토콜 레지스트리, CC0 1.0: [IANA licensing terms](https://www.iana.org/help/licensing-terms)).
 
 | 위키미디어 | BCP 47 | IANA 근거 |
 |---|---|---|
@@ -81,7 +98,7 @@ Edge Id(LOCAL ID)는 버전을 넘어 유지한다. 다시 생성할 때 직전 
 
 ### 역대응: BCP 47 tag → 위키미디어 코드
 
-역대응은 유일하다(`port.wikimediaCode`). tag가 위 표의 BCP 47 열에 있으면(대소문자 무시) 그 행의 위키미디어 코드이고, 없으면 tag 자체가 위키미디어 코드다. 위 표는 위키데이터가 받는 모든 코드(용어 언어와 monolingualtext 언어 합집합 1,488개, 2026-10-29 `wbcontentlanguages`) 위에서 일대일이고, 표의 BCP 47 열 tag는 어느 것도 위키데이터 코드가 아니다. 그래서 어떤 코드든 tag로 옮겼다가 되돌리면 원래 코드가 나온다. 이 목록은 `testdata/wikidata-languages.txt`에 두고 `TestWikimediaLanguageInjective`가 검사한다. 위키데이터가 새 코드를 받으면 목록을 갱신하고 다시 검사한다.
+역대응은 유일하다(`port.wikimediaCode`). LANGUAGE-SHORT-CODE는 먼저 레지스트리로 tag를 얻는다. tag가 위 표의 BCP 47 열에 있으면(대소문자 무시) 그 행의 위키미디어 코드이고, 없으면 tag를 소문자로 쓴 것이 위키미디어 코드다(위키미디어 코드는 모두 소문자이고, 문서에는 정규 대소문자 `pt-BR`로 있다). 위 표는 위키데이터가 받는 모든 코드(용어 언어와 monolingualtext 언어 합집합 1,488개, 2026-10-29 `wbcontentlanguages`) 위에서 일대일이고, 표의 BCP 47 열 tag는 어느 것도 위키데이터 코드가 아니다. 그래서 어떤 코드든 tag로 옮겼다가 되돌리면 원래 코드가 나온다. 이 목록은 `testdata/wikidata-languages.txt`에 두고 `TestWikimediaLanguageInjective`가 검사한다. 위키데이터가 새 코드를 받으면 목록을 갱신하고 다시 검사한다.
 
 | BCP 47 | 위키미디어 | | BCP 47 | 위키미디어 |
 |---|---|---|---|---|
@@ -92,7 +109,7 @@ Edge Id(LOCAL ID)는 버전을 넘어 유지한다. 다시 생성할 때 직전 
 | `en-simple` | `simple` | | `es-x-formal` | `es-formal` |
 | `roa-x-eml` | `eml` | | `hu-x-formal` | `hu-formal` |
 | `rup-x-roarup` | `roa-rup` | | `nl-x-informal` | `nl-informal` |
-| 그 밖의 tag | tag 그대로 | | | |
+| 그 밖의 tag | tag 소문자 | | | |
 
 ## 속성 데이터 타입
 

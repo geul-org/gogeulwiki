@@ -1,5 +1,5 @@
 //ff:func feature=port type=helper control=iteration dimension=1
-//ff:what TestWikimediaLanguageInjective — over every code Wikidata accepts, no two codes share a tag and wikimediaCode gives each code back
+//ff:what TestWikimediaLanguageInjective — over every code Wikidata accepts, no two codes share a tag and wikimediaCode gives each code back, from the tag as mapped and in canonical case
 package port
 
 import (
@@ -23,8 +23,8 @@ func TestWikimediaLanguageInjective(t *testing.T) {
 			t.Fatalf("%q and %q: same tag %q", other, code, tag)
 		}
 		seen[strings.ToLower(tag)] = code
-		if back := wikimediaCode(tag); back != code {
-			t.Fatalf("%q -> %q -> %q", code, tag, back)
+		if back, canon := wikimediaCode(tag), wikimediaCode(canonicalTag(tag)); back != code || canon != code {
+			t.Fatalf("%q -> %q -> %q (canonical case %q)", code, tag, back, canon)
 		}
 	}
 	if len(seen) < 1400 {
