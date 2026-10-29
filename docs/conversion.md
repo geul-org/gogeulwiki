@@ -39,7 +39,7 @@ Edge Id(LOCAL ID)는 버전을 넘어 유지한다. 다시 생성할 때 직전 
 | 항목 `Q…`, 속성 `P…` | WIKIDATA-QID, WIKIDATA-PID Reference |
 | Lexeme `L…`, EntitySchema `E…` | 건너뜀 (Reference Codec 없음) |
 | string, external-id, math, musical-notation | UTF8-TEXT (external-id는 식별자 텍스트 그대로) |
-| url | URI. 비ASCII·URI에 못 쓰는 바이트는 퍼센트 인코딩(RFC 3987 3.1, 되돌릴 수 있다). 스킴이 없으면 원문 UTF8-TEXT |
+| url | URI. 비ASCII·URI에 못 쓰는 바이트만 퍼센트 인코딩한다(RFC 3987 3.1). `%`는 그대로 두므로 원문 `a b`와 `a%20b`는 같은 URI가 되고, 원문 표기 자체는 보존하지 않는다. 스킴이 없으면 원문 UTF8-TEXT |
 | commonsMedia | URI `https://commons.wikimedia.org/wiki/File:` + 파일 이름(공백 → `_`, 한 경로 조각으로 퍼센트 인코딩) |
 | geo-shape, tabular-data | URI `https://commons.wikimedia.org/wiki/` + 페이지 이름(`Data:…`), 위와 같은 인코딩 |
 | time, 그레고리력 일 정밀도(기원전 포함) | GREGORIAN-DATE |
